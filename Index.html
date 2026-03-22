@@ -4,1189 +4,437 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>MAROUANE · OS</title>
+<meta name="color-scheme" content="dark">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#020205">
+<title>MARU · OS</title>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;600;700;900&family=DM+Mono:wght@400;500&family=Oswald:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #020205;
-  --bg2: #06060f;
-  --card: #0a0a18;
-  --border: #141428;
-  --border2: #1e1e3a;
-  --lime: #c8ff00;
-  --cyan: #00e5ff;
-  --orange: #ff6b00;
-  --pink: #ff0080;
-  --purple: #7c3aed;
-  --text: #f0f0ff;
-  --muted: #44445a;
-  --muted2: #2a2a45;
-  --musc: #c8ff00;
-  --cardio: #00e5ff;
-  --natation: #7c3aed;
-  --marche: #ff6b00;
-  --glow-lime: 0 0 20px rgba(200,255,0,0.3);
-  --glow-cyan: 0 0 20px rgba(0,229,255,0.3);
-  --glow-orange: 0 0 20px rgba(255,107,0,0.3);
+:root{color-scheme:dark only;}
+html{background:#020205!important;}
+:root{
+  --bg:#020205;--bg2:#06060f;--card:#0a0a18;
+  --border:#141428;--border2:#1e1e3a;
+  --lime:#c8ff00;--cyan:#00e5ff;--orange:#ff6b00;
+  --pink:#ff0080;--purple:#7c3aed;
+  --text:#f0f0ff;--muted:#44445a;--muted2:#2a2a45;
 }
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;background:#020205!important;}
+body{background:var(--bg)!important;color:var(--text);font-family:'DM Mono',monospace;display:flex;flex-direction:column;max-width:430px;margin:0 auto;-webkit-font-smoothing:antialiased;}
 
-- { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-  html,body { height:100%; overflow:hidden; }
+/* ── PARTICLES ── */
+#pc{position:fixed;inset:0;pointer-events:none;z-index:0;}
 
-body {
-background: var(–bg);
-color: var(–text);
-font-family: ‘DM Mono’, monospace;
-display: flex;
-flex-direction: column;
-max-width: 430px;
-margin: 0 auto;
-position: relative;
-}
+/* ── SCANLINES ── */
+.sl{position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.025) 3px,rgba(0,0,0,0.025) 6px);pointer-events:none;z-index:999;}
 
-/* SCANLINE OVERLAY */
-body::before {
-content: ‘’;
-position: fixed;
-inset: 0;
-background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
-pointer-events: none;
-z-index: 1000;
-}
+/* ── SPLASH ── */
+#splash{position:fixed;inset:0;background:#020205;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .7s ease,transform .7s ease;}
+#splash.hide{opacity:0;transform:scale(1.06);pointer-events:none;}
+.sp-logo{font-family:‘Oswald’,sans-serif;font-weight:900;font-size:84px;letter-spacing:.08em;color:var(–lime);text-transform:uppercase;line-height:1;animation:splPulse 1.5s ease infinite;}
+.sp-sub{font-size:9px;color:var(–muted);letter-spacing:.3em;text-transform:uppercase;margin-top:14px;opacity:0;animation:spFu .8s ease .6s forwards;}
+.sp-bar{width:140px;height:2px;background:var(–border2);margin-top:30px;overflow:hidden;opacity:0;animation:spFu .5s ease .3s forwards;}
+.sp-fill{height:100%;width:0%;background:linear-gradient(90deg,var(–lime),var(–cyan));animation:splLoad 2s cubic-bezier(.4,0,.2,1) .4s forwards;}
+@keyframes splLoad{to{width:100%;}}
+@keyframes splPulse{0%,100%{text-shadow:0 0 20px rgba(200,255,0,.5);}50%{text-shadow:0 0 60px rgba(200,255,0,1),0 0 100px rgba(200,255,0,.3);}}
+@keyframes spFu{to{opacity:1;}}
 
-/* GRID BACKGROUND */
-body::after {
-content: ‘’;
-position: fixed;
-inset: 0;
-background-image:
-linear-gradient(rgba(200,255,0,0.02) 1px, transparent 1px),
-linear-gradient(90deg, rgba(200,255,0,0.02) 1px, transparent 1px);
-background-size: 40px 40px;
-pointer-events: none;
-z-index: 0;
-}
+/* ── HEADER ── */
+.app-header{padding:14px 20px 10px;flex-shrink:0;position:relative;z-index:10;border-bottom:1px solid var(–border2);background:rgba(2,2,5,.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);}
+.app-header::after{content:’’;position:absolute;bottom:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(–lime),var(–cyan),transparent);opacity:.35;animation:hLine 4s ease infinite;}
+@keyframes hLine{0%,100%{opacity:.15;}50%{opacity:.6;}}
+.header-top{display:flex;align-items:center;justify-content:space-between;}
+.app-logo{font-family:‘Oswald’,sans-serif;font-weight:700;font-size:18px;letter-spacing:.15em;color:var(–lime);text-transform:uppercase;line-height:1;animation:lgPulse 3s ease infinite;}
+@keyframes lgPulse{0%,100%{text-shadow:0 0 10px rgba(200,255,0,.3);}50%{text-shadow:0 0 30px rgba(200,255,0,.8),0 0 60px rgba(200,255,0,.2);}}
+.app-logo span{color:var(–text);opacity:.3;font-weight:300;}
+.header-badge{display:flex;align-items:center;gap:6px;background:rgba(200,255,0,.06);border:1px solid rgba(200,255,0,.15);border-radius:3px;padding:4px 10px;}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:var(–lime);animation:bdot 1.5s ease infinite;}
+@keyframes bdot{0%,100%{transform:scale(1);box-shadow:0 0 8px rgba(200,255,0,.8);}50%{transform:scale(1.6);box-shadow:0 0 18px rgba(200,255,0,1);}}
+.badge-text{font-size:9px;color:var(–lime);letter-spacing:.12em;}
+.header-sub{font-size:9px;color:var(–muted);letter-spacing:.1em;margin-top:5px;text-transform:uppercase;}
 
-/* HEADER */
-.app-header {
-padding: 14px 20px 10px;
-flex-shrink: 0;
-position: relative;
-z-index: 10;
-border-bottom: 1px solid var(–border2);
-background: linear-gradient(180deg, rgba(200,255,0,0.04) 0%, transparent 100%);
-}
+/* ── PAGES ── */
+.pages{flex:1;overflow:hidden;position:relative;z-index:1;}
+.page{position:absolute;inset:0;overflow-y:auto;padding:14px 16px 90px;opacity:0;pointer-events:none;scrollbar-width:none;}
+.page::-webkit-scrollbar{display:none;}
+.page.active{opacity:1;pointer-events:all;}
+.page.si-r{animation:pgIR .38s cubic-bezier(.2,0,.1,1) forwards;}
+.page.si-l{animation:pgIL .38s cubic-bezier(.2,0,.1,1) forwards;}
+.page.so-l{animation:pgOL .25s cubic-bezier(.4,0,.2,1) forwards;}
+.page.so-r{animation:pgOR .25s cubic-bezier(.4,0,.2,1) forwards;}
+@keyframes pgIR{from{opacity:0;transform:translateX(50px) scale(.97);}to{opacity:1;transform:none;}}
+@keyframes pgIL{from{opacity:0;transform:translateX(-50px) scale(.97);}to{opacity:1;transform:none;}}
+@keyframes pgOL{to{opacity:0;transform:translateX(-40px) scale(.95);}}
+@keyframes pgOR{to{opacity:0;transform:translateX(40px) scale(.95);}}
 
-.header-top {
-display: flex;
-align-items: center;
-justify-content: space-between;
-}
+/* ── NAV ── */
+.bottom-nav{flex-shrink:0;display:grid;grid-template-columns:repeat(5,1fr);background:rgba(6,6,15,.97);border-top:1px solid var(–border2);padding:8px 0 18px;position:relative;z-index:10;backdrop-filter:blur(20px);}
+.bottom-nav::before{content:’’;position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(–lime),var(–cyan),var(–pink),transparent);opacity:.2;}
+.nav-btn{display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 2px;background:none;border:none;cursor:pointer;transition:all .25s cubic-bezier(.4,0,.2,1);position:relative;}
+.nav-btn::after{content:’’;position:absolute;bottom:-8px;left:50%;transform:translateX(-50%);width:0;height:2px;background:var(–lime);border-radius:1px;transition:width .3s cubic-bezier(.4,0,.2,1);box-shadow:0 0 8px rgba(200,255,0,.8);}
+.nav-btn.active::after{width:22px;}
+.nav-icon{font-size:18px;transition:all .3s cubic-bezier(.34,1.56,.64,1);}
+.nav-label{font-family:‘Barlow Condensed’,sans-serif;font-weight:600;font-size:8px;color:var(–muted);letter-spacing:.1em;text-transform:uppercase;transition:color .25s;}
+.nav-btn.active .nav-label{color:var(–lime);}
+.nav-btn.active .nav-icon{transform:scale(1.28) translateY(-3px);filter:drop-shadow(0 0 8px rgba(200,255,0,.8));}
+.nav-btn:active{transform:scale(.85);}
 
-.app-logo {
-font-family: ‘Oswald’, sans-serif;
-font-weight: 700;
-font-size: 18px;
-letter-spacing: 0.15em;
-color: var(–lime);
-text-transform: uppercase;
-text-shadow: var(–glow-lime);
-line-height: 1;
-}
+/* ── STAGGER ── */
+.stagger>*{opacity:0;transform:translateY(18px);animation:stIn .5s cubic-bezier(.2,0,.1,1) forwards;}
+.stagger>*:nth-child(1){animation-delay:.05s}.stagger>*:nth-child(2){animation-delay:.09s}
+.stagger>*:nth-child(3){animation-delay:.13s}.stagger>*:nth-child(4){animation-delay:.17s}
+.stagger>*:nth-child(5){animation-delay:.21s}.stagger>*:nth-child(6){animation-delay:.25s}
+.stagger>*:nth-child(7){animation-delay:.29s}.stagger>*:nth-child(8){animation-delay:.33s}
+.stagger>*:nth-child(9){animation-delay:.37s}.stagger>*:nth-child(10){animation-delay:.41s}
+.stagger>*:nth-child(11){animation-delay:.45s}.stagger>*:nth-child(12){animation-delay:.49s}
+.stagger>*:nth-child(13){animation-delay:.53s}.stagger>*:nth-child(14){animation-delay:.57s}
+@keyframes stIn{to{opacity:1;transform:translateY(0);}}
 
-.app-logo span {
-color: var(–text);
-opacity: 0.4;
-font-weight: 300;
-}
+/* ── SECTION ── */
+.sec-title{font-family:‘Oswald’,sans-serif;font-weight:700;font-size:30px;letter-spacing:.05em;text-transform:uppercase;line-height:1;margin-bottom:2px;}
+.sec-title .hi{color:var(–lime);}
+.sec-sub{font-size:9px;color:var(–muted);letter-spacing:.15em;text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.sec-sub::before{content:’’;display:inline-block;width:20px;height:1px;background:linear-gradient(90deg,var(–lime),transparent);}
 
-.header-badge {
-display: flex;
-align-items: center;
-gap: 6px;
-background: rgba(200,255,0,0.08);
-border: 1px solid rgba(200,255,0,0.2);
-border-radius: 4px;
-padding: 4px 10px;
-}
+/* ── HUD CARD 3D ── */
+.hud-card{background:var(–card);border:1px solid var(–border2);border-radius:3px;padding:14px;margin-bottom:8px;position:relative;overflow:hidden;transition:transform .3s cubic-bezier(.4,0,.2,1),box-shadow .3s ease,border-color .3s;}
+.hud-card::before{content:’’;position:absolute;top:0;left:0;width:3px;height:100%;background:linear-gradient(180deg,var(–lime),rgba(200,255,0,.1));}
+.hud-card.cyan::before{background:linear-gradient(180deg,var(–cyan),rgba(0,229,255,.1));}
+.hud-card.orange::before{background:linear-gradient(180deg,var(–orange),rgba(255,107,0,.1));}
+.hud-card.pink::before{background:linear-gradient(180deg,var(–pink),rgba(255,0,128,.1));}
+/* shimmer on hover */
+.hud-card::after{content:’’;position:absolute;top:0;left:-100%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.025),transparent);transition:left .5s ease;pointer-events:none;}
+.hud-card.clickable:hover::after{left:150%;}
+.hud-card.clickable{cursor:pointer;}
+.hud-card.clickable:hover{border-color:rgba(200,255,0,.25);box-shadow:0 10px 35px rgba(0,0,0,.5);transform:translateY(-2px);}
+.hud-card.clickable:active{transform:scale(.98);}
+.card-row{display:flex;align-items:center;justify-content:space-between;}
+.card-left{display:flex;align-items:center;gap:11px;}
+.card-icon-wrap{width:42px;height:42px;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;border:1px solid var(–border2);transition:transform .2s cubic-bezier(.34,1.56,.64,1);}
+.hud-card:active .card-icon-wrap{transform:scale(1.12);}
+.card-name{font-family:‘Oswald’,sans-serif;font-weight:600;font-size:14px;letter-spacing:.05em;text-transform:uppercase;margin-bottom:2px;}
+.card-sub{font-size:9px;color:var(–muted);letter-spacing:.08em;}
+.card-arrow{font-family:‘Barlow Condensed’,sans-serif;font-size:24px;color:var(–muted);transition:transform .2s ease,color .2s;}
+.hud-card:hover .card-arrow{transform:translateX(4px);color:var(–lime);}
 
-.badge-dot {
-width: 6px; height: 6px;
-border-radius: 50%;
-background: var(–lime);
-box-shadow: var(–glow-lime);
-animation: pulse-dot 2s infinite;
-}
+/* ── PROGRESS ── */
+.prog-track{height:3px;background:var(–border2);overflow:hidden;margin:8px 0;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(–lime),var(–cyan));transition:width .8s cubic-bezier(.4,0,.2,1);position:relative;}
+.prog-fill::after{content:’’;position:absolute;right:0;top:-3px;width:3px;height:9px;background:#fff;filter:blur(2px);opacity:.8;}
+.prog-fill.anim{background-size:200% 100%;animation:gmv 2s linear infinite;}
+@keyframes gmv{0%{background-position:0% 0;}100%{background-position:200% 0;}}
 
-@keyframes pulse-dot {
-0%,100% { opacity: 1; transform: scale(1); }
-50% { opacity: 0.4; transform: scale(0.8); }
-}
+/* ── STATS ── */
+.stat-grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;}
+.stat-box{background:var(–card);border:1px solid var(–border2);border-radius:3px;padding:12px 10px;text-align:center;transition:transform .2s cubic-bezier(.34,1.56,.64,1);}
+.stat-box:active{transform:scale(.93);}
+.stat-box.lime{border-top:2px solid var(–lime);}
+.stat-box.cyan{border-top:2px solid var(–cyan);}
+.stat-box.orange{border-top:2px solid var(–orange);}
+.stat-val{font-family:‘Barlow Condensed’,sans-serif;font-weight:900;font-size:24px;line-height:1;margin-bottom:4px;}
+.stat-label{font-size:8px;color:var(–muted);letter-spacing:.1em;text-transform:uppercase;}
 
-.badge-text {
-font-size: 9px;
-color: var(–lime);
-letter-spacing: 0.12em;
-}
+/* ── CHALLENGE RING ── */
+.challenge-ring{display:flex;align-items:center;gap:16px;background:var(–card);border:1px solid var(–border2);border-radius:3px;padding:16px;margin-bottom:8px;position:relative;overflow:hidden;}
+.challenge-ring::before{content:’’;position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(–lime),var(–cyan));}
+.ring-title{font-family:‘Oswald’,sans-serif;font-weight:700;font-size:24px;color:var(–lime);line-height:1;letter-spacing:.05em;text-shadow:0 0 20px rgba(200,255,0,.5);}
+.ring-sub{font-size:9px;color:var(–muted);letter-spacing:.1em;margin-top:4px;}
+.ring-days{font-size:9px;color:var(–lime);margin-top:6px;letter-spacing:.08em;}
 
-.header-sub {
-font-size: 9px;
-color: var(–muted);
-letter-spacing: 0.1em;
-margin-top: 5px;
-text-transform: uppercase;
-}
+/* ── WEEK ── */
+.week-strip{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:12px;}
+.w-day{background:var(–card);border:1px solid var(–border2);border-radius:3px;padding:7px 2px;text-align:center;transition:transform .2s cubic-bezier(.34,1.56,.64,1);}
+.w-day:active{transform:scale(.88);}
+.w-day.cheat{border-top:2px solid var(–orange);background:rgba(255,107,0,.04);}
+.w-day.today{border-top:2px solid var(–lime);animation:tdyP 2s ease infinite;}
+@keyframes tdyP{0%,100%{box-shadow:0 0 8px rgba(200,255,0,.1);}50%{box-shadow:0 0 20px rgba(200,255,0,.3);}}
+.wd-n{font-size:8px;color:var(–muted);margin-bottom:3px;letter-spacing:.05em;}
+.w-day.cheat .wd-n{color:var(–orange);}
+.w-day.today .wd-n{color:var(–lime);}
+.wd-ic{font-size:11px;}
+.wd-k{font-size:7px;color:var(–muted);margin-top:2px;}
 
-/* PAGES */
-.pages { flex: 1; overflow: hidden; position: relative; z-index: 1; }
-.page {
-position: absolute; inset: 0;
-overflow-y: auto;
-padding: 14px 16px 90px;
-opacity: 0; pointer-events: none;
-transform: translateY(8px);
-transition: all 0.25s cubic-bezier(.4,0,.2,1);
-scrollbar-width: none;
-}
-.page::-webkit-scrollbar { display: none; }
-.page.active { opacity: 1; pointer-events: all; transform: translateY(0); }
+/* ── TODO ── */
+.todo-item{background:var(–card);border:1px solid var(–border2);border-radius:3px;padding:11px 13px;margin-bottom:5px;display:flex;align-items:center;gap:12px;cursor:pointer;user-select:none;position:relative;overflow:hidden;transition:border-color .2s,transform .15s;}
+.todo-item::before{content:’’;position:absolute;left:0;top:0;bottom:0;width:0%;background:linear-gradient(90deg,rgba(200,255,0,.07),transparent);transition:width .4s cubic-bezier(.4,0,.2,1);}
+.todo-item.done::before{width:100%;}
+.todo-item.done{border-color:rgba(200,255,0,.08);}
+.todo-item:active{transform:scale(.99);}
+.todo-check{width:22px;height:22px;border-radius:3px;border:1px solid var(–border2);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;transition:all .25s cubic-bezier(.34,1.56,.64,1);position:relative;z-index:1;}
+.todo-item.done .todo-check{background:var(–lime);border-color:var(–lime);color:#000;box-shadow:0 0 15px rgba(200,255,0,.5);transform:scale(1.1);}
+.todo-title{font-family:‘Barlow Condensed’,sans-serif;font-weight:600;font-size:13px;letter-spacing:.04em;text-transform:uppercase;transition:opacity .2s;position:relative;z-index:1;}
+.todo-item.done .todo-title{opacity:.25;text-decoration:line-through;}
+.todo-time{font-size:9px;color:var(–muted);margin-top:1px;letter-spacing:.06em;position:relative;z-index:1;}
 
-/* NAV */
-.bottom-nav {
-flex-shrink: 0;
-display: grid;
-grid-template-columns: repeat(5,1fr);
-background: var(–bg2);
-border-top: 1px solid var(–border2);
-padding: 8px 0 18px;
-position: relative;
-z-index: 10;
-}
+/* ── CHEAT ── */
+.cheat-banner{background:rgba(255,107,0,.06);border:1px solid rgba(255,107,0,.25);border-radius:3px;padding:12px 14px;margin-bottom:10px;display:none;position:relative;overflow:hidden;}
+.cheat-banner::before{content:’’;position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(–orange),transparent);animation:scMv 2s linear infinite;}
+@keyframes scMv{0%{transform:translateX(-100%);}100%{transform:translateX(100%);}}
+.cheat-banner.visible{display:block;animation:chP 2s ease infinite;}
+@keyframes chP{0%,100%{border-color:rgba(255,107,0,.2);}50%{border-color:rgba(255,107,0,.5);}}
+.cheat-title{font-family:‘Oswald’,sans-serif;font-weight:700;font-size:16px;color:var(–orange);letter-spacing:.1em;text-transform:uppercase;}
+.cheat-sub{font-size:9px;color:rgba(255,107,0,.5);letter-spacing:.08em;margin-top:2px;}
 
-.bottom-nav::before {
-content: ‘’;
-position: absolute;
-top: 0; left: 0; right: 0;
-height: 1px;
-background: linear-gradient(90deg, transparent, var(–lime), transparent);
-opacity: 0.3;
-}
+/* ── TRACKER ── */
+.tracker-hud{background:var(–card);border:1px solid var(–border2);border-radius:3px;padding:14px;margin-bottom:10px;position:sticky;top:0;z-index:5;overflow:hidden;}
+.tracker-hud::before{content:’’;position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(–lime),var(–cyan),var(–pink));background-size:200% 100%;animation:gmv 3s linear infinite;}
+.tracker-kcal{font-family:‘Barlow Condensed’,sans-serif;font-weight:900;font-size:52px;line-height:1;color:var(–lime);text-shadow:0 0 30px rgba(200,255,0,.4);letter-spacing:-.02em;transition:all .4s cubic-bezier(.4,0,.2,1);}
+.tracker-kcal.bump,.tm-val.bump{animation:kBump .3s cubic-bezier(.34,1.56,.64,1);}
+@keyframes kBump{50%{transform:scale(1.1);}}
+.tracker-goal{font-size:10px;color:var(–muted);margin-bottom:8px;}
+.tracker-remain{font-family:‘Oswald’,sans-serif;font-weight:600;font-size:14px;color:var(–lime);letter-spacing:.05em;text-align:right;transition:all .3s;}
+.tracker-status{font-size:9px;color:var(–muted);text-align:right;margin-bottom:4px;}
+.tracker-macros{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px;}
+.tm{text-align:center;padding:8px;background:rgba(255,255,255,.02);border-radius:3px;border:1px solid var(–border2);}
+.tm-val{font-family:‘Barlow Condensed’,sans-serif;font-weight:700;font-size:18px;line-height:1;transition:all .4s cubic-bezier(.34,1.56,.64,1);}
+.tm-lbl{font-size:8px;color:var(–muted);letter-spacing:.1em;margin-top:2px;}
 
-.nav-btn {
-display: flex; flex-direction: column;
-align-items: center; gap: 4px;
-padding: 6px 2px;
-background: none; border: none;
-cursor: pointer; transition: all 0.2s;
-}
+/* ── MEALS ── */
+.meal-sec{font-size:9px;color:var(–muted);letter-spacing:.15em;text-transform:uppercase;margin:12px 0 7px;display:flex;align-items:center;gap:8px;}
+.meal-sec::after{content:’’;flex:1;height:1px;background:var(–border2);}
+.mtabs{display:flex;gap:4px;margin-bottom:8px;overflow-x:auto;scrollbar-width:none;}
+.mtabs::-webkit-scrollbar{display:none;}
+.mtab{font-family:‘Barlow Condensed’,sans-serif;font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:7px 14px;border-radius:3px;border:1px solid var(–border2);background:transparent;color:var(–muted);cursor:pointer;white-space:nowrap;transition:all .2s cubic-bezier(.4,0,.2,1);}
+.mtab:active{transform:scale(.93);}
+.mtab.active{background:var(–lime);color:#000;border-color:var(–lime);box-shadow:0 0 15px rgba(200,255,0,.3);}
+.mtab.active.c2{background:var(–cyan);border-color:var(–cyan);box-shadow:0 0 15px rgba(0,229,255,.3);}
+.rpanel{display:none;}
+.rpanel.active{display:block;animation:spFu .3s ease;}
+.recipe-hud{background:var(–card);border:1px solid var(–border2);border-radius:3px;overflow:hidden;margin-bottom:7px;}
+.recipe-top{padding:12px 14px;border-bottom:1px solid var(–border2);display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.02);}
+.recipe-emoji{font-size:28px;animation:eF 3s ease infinite;display:block;}
+@keyframes eF{0%,100%{transform:translateY(0) rotate(0);}50%{transform:translateY(-4px) rotate(5deg);}}
+.recipe-name{font-family:‘Oswald’,sans-serif;font-weight:600;font-size:15px;letter-spacing:.05em;text-transform:uppercase;flex:1;}
+.recipe-badge{font-family:‘Barlow Condensed’,sans-serif;font-weight:700;font-size:14px;color:var(–lime);background:rgba(200,255,0,.08);border:1px solid rgba(200,255,0,.2);padding:3px 8px;border-radius:3px;box-shadow:0 0 10px rgba(200,255,0,.1);}
+.ing-row{display:flex;justify-content:space-between;align-items:center;padding:8px 14px;border-bottom:1px solid rgba(20,20,40,.8);font-size:12px;transition:background .15s;}
+.ing-row:last-child{border-bottom:none;}
+.ing-row:active{background:rgba(255,255,255,.03);}
+.ing-n{color:rgba(240,240,255,.7);}
+.ing-q{font-size:11px;color:var(–cyan);letter-spacing:.06em;}
+.macro-strip-recipe{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(–border2);}
+.mc{padding:8px;text-align:center;border-right:1px solid var(–border2);}
+.mc:last-child{border-right:none;}
+.mc-v{font-family:‘Barlow Condensed’,sans-serif;font-weight:700;font-size:16px;line-height:1;}
+.mc-l{font-size:8px;color:var(–muted);margin-top:2px;letter-spacing:.08em;}
+.prep-note{padding:9px 13px;font-size:10px;color:var(–muted);border-top:1px solid var(–border2);line-height:1.6;}
 
-.nav-icon { font-size: 18px; transition: all 0.2s; }
-.nav-label {
-font-family: ‘Barlow Condensed’, sans-serif;
-font-weight: 600;
-font-size: 8px;
-color: var(–muted);
-letter-spacing: 0.1em;
-text-transform: uppercase;
-transition: color 0.2s;
-}
+/* ── COLLATION ── */
+.coll-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px;}
+.coll-card{background:var(–card);border:1px solid var(–border2);border-radius:3px;padding:10px;cursor:pointer;transition:all .25s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden;}
+.coll-card:active{transform:scale(.94);}
+.coll-card.selected{border-color:var(–cyan);background:rgba(0,229,255,.05);box-shadow:0 0 20px rgba(0,229,255,.1);}
+.coll-card.selected::before{content:’’;position:absolute;top:0;left:0;right:0;height:2px;background:var(–cyan);box-shadow:0 0 10px rgba(0,229,255,.5);}
+.coll-t{font-family:‘Barlow Condensed’,sans-serif;font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px;}
+.coll-it{font-size:10px;color:var(–muted);line-height:1.6;}
+.coll-m{font-size:10px;color:var(–lime);margin-top:5px;letter-spacing:.06em;}
 
-.nav-btn.active .nav-label { color: var(–lime); }
-.nav-btn.active .nav-icon { transform: scale(1.2); filter: drop-shadow(0 0 6px rgba(200,255,0,0.5)); }
+/* ── CALENDAR ── */
+.cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.cal-month{font-family:‘Oswald’,sans-serif;font-weight:700;font-size:22px;letter-spacing:.08em;text-transform:uppercase;}
+.cal-nav-btn{width:34px;height:34px;border-radius:3px;background:var(–card);border:1px solid var(–border2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(–text);transition:all .2s cubic-bezier(.34,1.56,.64,1);}
+.cal-nav-btn:active{transform:scale(.86);background:rgba(200,255,0,.1);border-color:var(–lime);}
+.streak-row{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:12px;}
+.streak-box{background:var(–card);border:1px solid var(–border2);border-radius:3px;padding:12px 8px;text-align:center;transition:transform .2s cubic-bezier(.34,1.56,.64,1);}
+.streak-box:active{transform:scale(.93);}
+.streak-num{font-family:‘Barlow Condensed’,sans-serif;font-weight:900;font-size:36px;line-height:1;margin-bottom:2px;}
+.streak-ico{font-size:14px;margin-bottom:4px;}
+.streak-lbl{font-size:8px;color:var(–muted);letter-spacing:.1em;text-transform:uppercase;}
+.act-legend{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.act-pill{display:flex;align-items:center;gap:5px;padding:5px 10px;border-radius:3px;font-size:10px;font-family:‘Barlow Condensed’,sans-serif;font-weight:600;letter-spacing:.06em;text-transform:uppercase;border:1px solid;transition:transform .15s;}
+.act-pill:active{transform:scale(.93);}
+.cal-days-hdr{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:4px;}
+.cal-dname{font-size:9px;color:var(–muted);text-align:center;padding:3px 0;letter-spacing:.05em;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
+.cal-day{background:var(–card);border:1px solid var(–border2);border-radius:3px;aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;user-select:none;transition:transform .2s cubic-bezier(.34,1.56,.64,1);}
+.cal-day:active{transform:scale(.84);}
+.cal-day.empty{background:transparent;border-color:transparent;cursor:default;}
+.cal-day.today-c{border-color:var(–lime);animation:tdyP 2s ease infinite;}
+.cal-day.future{opacity:.2;cursor:default;}
+.cal-daynum{font-family:‘Barlow Condensed’,sans-serif;font-weight:700;font-size:13px;line-height:1;}
+.cal-day.today-c .cal-daynum{color:var(–lime);}
+.cal-dayico{font-size:10px;line-height:1;margin-top:1px;}
+.cal-daydot{width:4px;height:4px;border-radius:50%;margin-top:2px;}
 
-/* SECTION TITLES */
-.sec-title {
-font-family: ‘Oswald’, sans-serif;
-font-weight: 700;
-font-size: 30px;
-letter-spacing: 0.05em;
-text-transform: uppercase;
-line-height: 1;
-margin-bottom: 2px;
-}
-.sec-title .hi { color: var(–lime); }
-.sec-sub {
-font-size: 9px;
-color: var(–muted);
-letter-spacing: 0.15em;
-text-transform: uppercase;
-margin-bottom: 16px;
-display: flex;
-align-items: center;
-gap: 8px;
-}
-.sec-sub::before {
-content: ‘’;
-display: inline-block;
-width: 20px; height: 1px;
-background: var(–lime);
-}
+/* ── STRAVA ── */
+.strava-hero{background:linear-gradient(135deg,rgba(252,76,2,.12),rgba(252,76,2,.03));border:1px solid rgba(252,76,2,.25);border-radius:3px;padding:18px;margin-bottom:12px;position:relative;overflow:hidden;}
+.strava-hero::before{content:’’;position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#fc4c02,var(–orange),#fc4c02);background-size:200% 100%;animation:gmv 2s linear infinite;}
+.strava-logo{font-family:‘Oswald’,sans-serif;font-weight:700;font-size:28px;color:#fc4c02;letter-spacing:.1em;animation:sglow 2s ease infinite;margin-bottom:6px;}
+@keyframes sglow{0%,100%{text-shadow:0 0 20px rgba(252,76,2,.4);}50%{text-shadow:0 0 40px rgba(252,76,2,1),0 0 80px rgba(252,76,2,.2);}}
+.strava-sub{font-size:10px;color:rgba(252,76,2,.5);letter-spacing:.1em;margin-bottom:14px;}
+.strava-connect-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:14px;background:#fc4c02;border:none;border-radius:3px;cursor:pointer;font-family:‘Oswald’,sans-serif;font-weight:700;font-size:15px;letter-spacing:.1em;color:#fff;text-transform:uppercase;transition:all .2s cubic-bezier(.34,1.56,.64,1);box-shadow:0 4px 25px rgba(252,76,2,.35);}
+.strava-connect-btn:active{transform:scale(.96);}
+.strava-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.strava-info-box{background:var(–card);border:1px solid var(–border2);border-radius:3px;padding:12px;text-align:center;}
+.strava-info-val{font-family:‘Barlow Condensed’,sans-serif;font-weight:900;font-size:24px;color:#fc4c02;line-height:1;margin-bottom:3px;}
+.strava-info-lbl{font-size:9px;color:var(–muted);letter-spacing:.1em;}
+.activity-card{background:var(–card);border:1px solid var(–border2);border-radius:3px;padding:14px;margin-bottom:8px;position:relative;overflow:hidden;transition:transform .2s;}
+.activity-card:active{transform:scale(.99);}
+.activity-card::before{content:’’;position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,#fc4c02,rgba(252,76,2,.1));}
+.act-card-name{font-family:‘Oswald’,sans-serif;font-weight:600;font-size:15px;letter-spacing:.05em;text-transform:uppercase;}
+.act-card-date{font-size:9px;color:var(–muted);letter-spacing:.08em;margin-top:2px;}
+.act-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px;}
+.act-stat{text-align:center;}
+.act-stat-val{font-family:‘Barlow Condensed’,sans-serif;font-weight:700;font-size:18px;color:#fc4c02;line-height:1;}
+.act-stat-lbl{font-size:8px;color:var(–muted);letter-spacing:.08em;margin-top:2px;}
+.strava-steps{background:var(–card);border:1px solid var(–border2);border-radius:3px;padding:14px;margin-top:12px;}
+.step-item{display:flex;gap:12px;align-items:flex-start;margin-bottom:12px;}
+.step-item:last-child{margin-bottom:0;}
+.step-num{width:24px;height:24px;border-radius:3px;background:rgba(252,76,2,.12);border:1px solid rgba(252,76,2,.25);display:flex;align-items:center;justify-content:center;font-family:‘Barlow Condensed’,sans-serif;font-weight:700;font-size:13px;color:#fc4c02;flex-shrink:0;}
+.step-text{font-size:12px;color:rgba(240,240,255,.65);line-height:1.5;}
+.step-text strong{color:var(–text);}
 
-/* HUD CARD */
-.hud-card {
-background: var(–card);
-border: 1px solid var(–border2);
-border-radius: 2px;
-padding: 14px;
-margin-bottom: 8px;
-position: relative;
-overflow: hidden;
-transition: all 0.2s;
-}
-.hud-card::before {
-content: ‘’;
-position: absolute;
-top: 0; left: 0;
-width: 3px; height: 100%;
-background: var(–lime);
-}
-.hud-card.cyan::before { background: var(–cyan); }
-.hud-card.orange::before { background: var(–orange); }
-.hud-card.pink::before { background: var(–pink); }
-.hud-card:active { transform: scale(0.99); }
+/* ── DETAIL PANEL ── */
+.detail-panel{position:fixed;inset:0;background:var(–bg);z-index:100;display:flex;flex-direction:column;max-width:430px;margin:0 auto;transform:translateX(100%);transition:transform .4s cubic-bezier(.4,0,.2,1);}
+.detail-panel.open{transform:translateX(0);}
+.detail-hdr{padding:14px 16px 12px;border-bottom:1px solid var(–border2);display:flex;align-items:center;gap:12px;flex-shrink:0;background:rgba(2,2,5,.96);backdrop-filter:blur(20px);}
+.back-btn{width:34px;height:34px;border-radius:3px;background:var(–card);border:1px solid var(–border2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(–text);transition:all .2s cubic-bezier(.34,1.56,.64,1);}
+.back-btn:active{transform:scale(.86);}
+.detail-title{font-family:‘Oswald’,sans-serif;font-weight:700;font-size:16px;letter-spacing:.08em;text-transform:uppercase;flex:1;color:var(–lime);}
+.detail-body{flex:1;overflow-y:auto;padding:16px;scrollbar-width:none;}
+.detail-body::-webkit-scrollbar{display:none;}
 
-/* CORNER DECORATION */
-.hud-card::after {
-content: ‘’;
-position: absolute;
-bottom: 0; right: 0;
-width: 20px; height: 20px;
-border-bottom: 1px solid var(–border2);
-border-right: 1px solid var(–border2);
-}
-
-/* CLICKABLE CARD */
-.hud-card.clickable { cursor: pointer; }
-.hud-card.clickable:hover { border-color: rgba(200,255,0,0.2); }
-
-.card-row { display: flex; align-items: center; justify-content: space-between; }
-.card-icon-wrap {
-width: 40px; height: 40px;
-border-radius: 2px;
-display: flex; align-items: center; justify-content: center;
-font-size: 20px;
-flex-shrink: 0;
-border: 1px solid var(–border2);
-}
-.card-name {
-font-family: ‘Oswald’, sans-serif;
-font-weight: 600;
-font-size: 14px;
-letter-spacing: 0.05em;
-text-transform: uppercase;
-margin-bottom: 2px;
-}
-.card-sub {
-font-size: 9px;
-color: var(–muted);
-letter-spacing: 0.08em;
-}
-.card-arrow {
-font-family: ‘Barlow Condensed’, sans-serif;
-font-size: 22px;
-color: var(–muted);
-}
-
-/* NUMBERS */
-.big-num {
-font-family: ‘Barlow Condensed’, sans-serif;
-font-weight: 900;
-font-size: 52px;
-line-height: 1;
-letter-spacing: -0.02em;
-}
-.med-num {
-font-family: ‘Barlow Condensed’, sans-serif;
-font-weight: 700;
-font-size: 28px;
-line-height: 1;
-}
-.small-label {
-font-size: 9px;
-color: var(–muted);
-letter-spacing: 0.12em;
-text-transform: uppercase;
-margin-top: 2px;
-}
-
-/* PROGRESS BAR */
-.prog-track {
-height: 3px;
-background: var(–border2);
-border-radius: 0;
-overflow: hidden;
-margin: 8px 0;
-}
-.prog-fill {
-height: 100%;
-border-radius: 0;
-transition: width 0.6s cubic-bezier(.4,0,.2,1);
-position: relative;
-}
-.prog-fill::after {
-content: ‘’;
-position: absolute;
-right: 0; top: -2px;
-width: 2px; height: 7px;
-background: inherit;
-filter: brightness(2);
-}
-
-/* STAT GRID */
-.stat-grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 6px; }
-.stat-grid-2 { display: grid; grid-template-columns: repeat(2,1fr); gap: 6px; }
-.stat-box {
-background: var(–card);
-border: 1px solid var(–border2);
-border-radius: 2px;
-padding: 12px 10px;
-text-align: center;
-position: relative;
-}
-.stat-box.lime { border-top: 2px solid var(–lime); }
-.stat-box.cyan { border-top: 2px solid var(–cyan); }
-.stat-box.orange { border-top: 2px solid var(–orange); }
-.stat-box.pink { border-top: 2px solid var(–pink); }
-.stat-val {
-font-family: ‘Barlow Condensed’, sans-serif;
-font-weight: 900;
-font-size: 24px;
-line-height: 1;
-margin-bottom: 4px;
-}
-.stat-label { font-size: 8px; color: var(–muted); letter-spacing: 0.1em; text-transform: uppercase; }
-
-/* WEEK STRIP */
-.week-strip { display: grid; grid-template-columns: repeat(7,1fr); gap: 3px; margin-bottom: 12px; }
-.w-day {
-background: var(–card);
-border: 1px solid var(–border2);
-border-radius: 2px;
-padding: 7px 2px;
-text-align: center;
-position: relative;
-}
-.w-day.cheat { border-top: 2px solid var(–orange); background: rgba(255,107,0,0.05); }
-.w-day.today { border-top: 2px solid var(–lime); box-shadow: 0 0 10px rgba(200,255,0,0.1); }
-.wd-n { font-size: 8px; color: var(–muted); margin-bottom: 3px; letter-spacing: 0.05em; }
-.w-day.cheat .wd-n { color: var(–orange); }
-.w-day.today .wd-n { color: var(–lime); }
-.wd-ic { font-size: 11px; }
-.wd-k { font-size: 7px; color: var(–muted); margin-top: 2px; }
-
-/* TODO */
-.todo-item {
-background: var(–card);
-border: 1px solid var(–border2);
-border-radius: 2px;
-padding: 11px 13px;
-margin-bottom: 5px;
-display: flex;
-align-items: center;
-gap: 12px;
-cursor: pointer;
-transition: all 0.15s;
-user-select: none;
-position: relative;
-overflow: hidden;
-}
-.todo-item::before {
-content: ‘’;
-position: absolute;
-left: 0; top: 0; bottom: 0;
-width: 0;
-background: rgba(200,255,0,0.05);
-transition: width 0.3s;
-}
-.todo-item.done::before { width: 100%; }
-.todo-item:active { transform: scale(0.99); }
-
-.todo-check {
-width: 20px; height: 20px;
-border-radius: 2px;
-border: 1px solid var(–border2);
-flex-shrink: 0;
-display: flex;
-align-items: center;
-justify-content: center;
-font-size: 11px;
-transition: all 0.2s;
-position: relative;
-z-index: 1;
-}
-.todo-item.done .todo-check {
-background: var(–lime);
-border-color: var(–lime);
-color: #000;
-box-shadow: 0 0 8px rgba(200,255,0,0.4);
-}
-.todo-title {
-font-family: ‘Barlow Condensed’, sans-serif;
-font-weight: 600;
-font-size: 13px;
-letter-spacing: 0.04em;
-text-transform: uppercase;
-color: var(–text);
-transition: opacity 0.2s;
-position: relative;
-z-index: 1;
-}
-.todo-item.done .todo-title { opacity: 0.3; text-decoration: line-through; }
-.todo-time { font-size: 9px; color: var(–muted); margin-top: 1px; letter-spacing: 0.06em; position: relative; z-index: 1; }
-
-/* CHEAT BANNER */
-.cheat-banner {
-background: rgba(255,107,0,0.06);
-border: 1px solid rgba(255,107,0,0.3);
-border-radius: 2px;
-padding: 12px 14px;
-margin-bottom: 10px;
-display: none;
-position: relative;
-overflow: hidden;
-}
-.cheat-banner::before {
-content: ‘’;
-position: absolute;
-top: 0; left: 0; right: 0;
-height: 1px;
-background: linear-gradient(90deg, transparent, var(–orange), transparent);
-}
-.cheat-banner.visible { display: block; }
-.cheat-title {
-font-family: ‘Oswald’, sans-serif;
-font-weight: 700;
-font-size: 16px;
-color: var(–orange);
-letter-spacing: 0.1em;
-text-transform: uppercase;
-}
-.cheat-sub { font-size: 9px; color: rgba(255,107,0,0.6); letter-spacing: 0.08em; margin-top: 2px; }
-
-/* MEAL TRACKER */
-.tracker-hud {
-background: var(–card);
-border: 1px solid var(–border2);
-border-radius: 2px;
-padding: 14px;
-margin-bottom: 10px;
-position: sticky;
-top: 0;
-z-index: 5;
-overflow: hidden;
-}
-.tracker-hud::before {
-content: ‘NUTRITIONAL HUD’;
-position: absolute;
-top: 8px; right: 12px;
-font-size: 8px;
-color: var(–muted2);
-letter-spacing: 0.15em;
-}
-.tracker-hud::after {
-content: ‘’;
-position: absolute;
-top: 0; left: 0; right: 0;
-height: 2px;
-background: linear-gradient(90deg, var(–lime), var(–cyan));
-}
-.tracker-main-row { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 8px; }
-.tracker-kcal {
-font-family: ‘Barlow Condensed’, sans-serif;
-font-weight: 900;
-font-size: 44px;
-line-height: 1;
-color: var(–lime);
-text-shadow: var(–glow-lime);
-letter-spacing: -0.02em;
-}
-.tracker-goal { font-size: 10px; color: var(–muted); margin-bottom: 8px; }
-.tracker-remain {
-font-family: ‘Oswald’, sans-serif;
-font-weight: 600;
-font-size: 14px;
-color: var(–lime);
-letter-spacing: 0.05em;
-text-align: right;
-}
-.tracker-status { font-size: 9px; color: var(–muted); text-align: right; margin-bottom: 4px; }
-.tracker-macros { display: grid; grid-template-columns: repeat(3,1fr); gap: 6px; margin-top: 8px; }
-.tm { text-align: center; padding: 7px; background: rgba(255,255,255,0.02); border-radius: 2px; border: 1px solid var(–border2); }
-.tm-val {
-font-family: ‘Barlow Condensed’, sans-serif;
-font-weight: 700;
-font-size: 18px;
-line-height: 1;
-}
-.tm-lbl { font-size: 8px; color: var(–muted); letter-spacing: 0.1em; margin-top: 2px; }
-
-/* MEAL TABS */
-.meal-sec { font-size: 9px; color: var(–muted); letter-spacing: 0.15em; text-transform: uppercase; margin: 12px 0 7px; display: flex; align-items: center; gap: 8px; }
-.meal-sec::after { content: ‘’; flex: 1; height: 1px; background: var(–border2); }
-.mtabs { display: flex; gap: 4px; margin-bottom: 8px; overflow-x: auto; scrollbar-width: none; }
-.mtabs::-webkit-scrollbar { display: none; }
-.mtab {
-font-family: ‘Barlow Condensed’, sans-serif;
-font-weight: 600;
-font-size: 11px;
-letter-spacing: 0.06em;
-text-transform: uppercase;
-padding: 6px 13px;
-border-radius: 2px;
-border: 1px solid var(–border2);
-background: transparent;
-color: var(–muted);
-cursor: pointer;
-white-space: nowrap;
-transition: all 0.2s;
-}
-.mtab.active { background: var(–lime); color: #000; border-color: var(–lime); }
-.mtab.active.c2 { background: var(–cyan); border-color: var(–cyan); }
-
-/* RECIPE */
-.rpanel { display: none; }
-.rpanel.active { display: block; }
-.recipe-hud {
-background: var(–card);
-border: 1px solid var(–border2);
-border-radius: 2px;
-overflow: hidden;
-margin-bottom: 7px;
-}
-.recipe-top {
-padding: 12px 14px;
-border-bottom: 1px solid var(–border2);
-display: flex;
-align-items: center;
-gap: 10px;
-background: rgba(255,255,255,0.02);
-}
-.recipe-emoji { font-size: 26px; }
-.recipe-name {
-font-family: ‘Oswald’, sans-serif;
-font-weight: 600;
-font-size: 15px;
-letter-spacing: 0.05em;
-text-transform: uppercase;
-flex: 1;
-}
-.recipe-badge {
-font-family: ‘Barlow Condensed’, sans-serif;
-font-weight: 700;
-font-size: 14px;
-color: var(–lime);
-background: rgba(200,255,0,0.08);
-border: 1px solid rgba(200,255,0,0.2);
-padding: 3px 8px;
-border-radius: 2px;
-white-space: nowrap;
-}
-.ing-row {
-display: flex;
-justify-content: space-between;
-align-items: center;
-padding: 8px 14px;
-border-bottom: 1px solid rgba(20,20,40,0.8);
-font-size: 12px;
-}
-.ing-row:last-child { border-bottom: none; }
-.ing-n { color: rgba(240,240,255,0.7); }
-.ing-q { font-size: 11px; color: var(–cyan); letter-spacing: 0.06em; }
-.macro-strip-recipe {
-display: grid;
-grid-template-columns: repeat(4,1fr);
-border-top: 1px solid var(–border2);
-}
-.mc { padding: 8px; text-align: center; border-right: 1px solid var(–border2); }
-.mc:last-child { border-right: none; }
-.mc-v {
-font-family: ‘Barlow Condensed’, sans-serif;
-font-weight: 700;
-font-size: 16px;
-line-height: 1;
-}
-.mc-l { font-size: 8px; color: var(–muted); margin-top: 2px; letter-spacing: 0.08em; }
-.prep-note { padding: 9px 13px; font-size: 10px; color: var(–muted); border-top: 1px solid var(–border2); line-height: 1.5; }
-
-/* COLLATION */
-.coll-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 8px; }
-.coll-card {
-background: var(–card);
-border: 1px solid var(–border2);
-border-radius: 2px;
-padding: 10px;
-cursor: pointer;
-transition: all 0.2s;
-position: relative;
-}
-.coll-card.selected { border-color: var(–cyan); background: rgba(0,229,255,0.05); }
-.coll-card.selected::before { content: ‘’; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(–cyan); }
-.coll-t {
-font-family: ‘Barlow Condensed’, sans-serif;
-font-weight: 600;
-font-size: 12px;
-text-transform: uppercase;
-letter-spacing: 0.05em;
-margin-bottom: 5px;
-}
-.coll-it { font-size: 10px; color: var(–muted); line-height: 1.6; }
-.coll-m { font-size: 10px; color: var(–lime); margin-top: 5px; letter-spacing: 0.06em; }
-
-/* CALENDAR */
-.cal-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-.cal-month {
-font-family: ‘Oswald’, sans-serif;
-font-weight: 700;
-font-size: 22px;
-letter-spacing: 0.08em;
-text-transform: uppercase;
-}
-.cal-nav-btn {
-width: 32px; height: 32px;
-border-radius: 2px;
-background: var(–card);
-border: 1px solid var(–border2);
-cursor: pointer;
-display: flex;
-align-items: center;
-justify-content: center;
-font-size: 16px;
-color: var(–text);
-transition: all 0.2s;
-font-family: ‘Barlow Condensed’, sans-serif;
-}
-.cal-nav-btn:active { background: rgba(200,255,0,0.1); border-color: var(–lime); }
-
-/* STREAK STATS */
-.streak-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 6px; margin-bottom: 12px; }
-.streak-box {
-background: var(–card);
-border: 1px solid var(–border2);
-border-radius: 2px;
-padding: 12px 8px;
-text-align: center;
-position: relative;
-overflow: hidden;
-}
-.streak-num {
-font-family: ‘Barlow Condensed’, sans-serif;
-font-weight: 900;
-font-size: 36px;
-line-height: 1;
-margin-bottom: 2px;
-}
-.streak-ico { font-size: 14px; margin-bottom: 4px; }
-.streak-lbl { font-size: 8px; color: var(–muted); letter-spacing: 0.1em; text-transform: uppercase; }
-
-/* ACTIVITY LEGEND */
-.act-legend { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
-.act-pill {
-display: flex; align-items: center; gap: 5px;
-padding: 5px 10px;
-border-radius: 2px;
-font-size: 10px;
-font-family: ‘Barlow Condensed’, sans-serif;
-font-weight: 600;
-letter-spacing: 0.06em;
-text-transform: uppercase;
-border: 1px solid;
-}
-
-/* CAL GRID */
-.cal-days-hdr { display: grid; grid-template-columns: repeat(7,1fr); gap: 3px; margin-bottom: 4px; }
-.cal-dname { font-size: 9px; color: var(–muted); text-align: center; padding: 3px 0; letter-spacing: 0.05em; }
-.cal-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 3px; }
-.cal-day {
-background: var(–card);
-border: 1px solid var(–border2);
-border-radius: 2px;
-aspect-ratio: 1;
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-cursor: pointer;
-transition: all 0.15s;
-position: relative;
-overflow: hidden;
-user-select: none;
-}
-.cal-day:active { transform: scale(0.88); }
-.cal-day.empty { background: transparent; border-color: transparent; cursor: default; }
-.cal-day.today-c { border-color: var(–lime); box-shadow: 0 0 8px rgba(200,255,0,0.15); }
-.cal-day.future { opacity: 0.25; cursor: default; }
-.cal-day.challenge-start { border-color: rgba(0,229,255,0.3); }
-.cal-daynum {
-font-family: ‘Barlow Condensed’, sans-serif;
-font-weight: 700;
-font-size: 13px;
-line-height: 1;
-color: var(–text);
-}
-.cal-day.today-c .cal-daynum { color: var(–lime); }
-.cal-dayico { font-size: 10px; line-height: 1; margin-top: 1px; }
-.cal-daydot { width: 4px; height: 4px; border-radius: 50%; margin-top: 2px; }
-
-/* STRAVA TAB */
-.strava-hero {
-background: linear-gradient(135deg, rgba(252,76,2,0.15), rgba(252,76,2,0.03));
-border: 1px solid rgba(252,76,2,0.3);
-border-radius: 2px;
-padding: 18px;
-margin-bottom: 12px;
-position: relative;
-overflow: hidden;
-}
-.strava-hero::before {
-content: ‘’;
-position: absolute;
-top: 0; left: 0; right: 0;
-height: 2px;
-background: linear-gradient(90deg, #fc4c02, var(–orange));
-}
-.strava-logo {
-font-family: ‘Oswald’, sans-serif;
-font-weight: 700;
-font-size: 28px;
-color: #fc4c02;
-letter-spacing: 0.1em;
-text-shadow: 0 0 20px rgba(252,76,2,0.4);
-margin-bottom: 6px;
-}
-.strava-sub { font-size: 10px; color: rgba(252,76,2,0.6); letter-spacing: 0.1em; margin-bottom: 14px; }
-
-.strava-connect-btn {
-display: flex;
-align-items: center;
-justify-content: center;
-gap: 10px;
-width: 100%;
-padding: 14px;
-background: #fc4c02;
-border: none;
-border-radius: 2px;
-cursor: pointer;
-font-family: ‘Oswald’, sans-serif;
-font-weight: 700;
-font-size: 15px;
-letter-spacing: 0.1em;
-color: #fff;
-text-transform: uppercase;
-transition: all 0.2s;
-box-shadow: 0 4px 20px rgba(252,76,2,0.3);
-}
-.strava-connect-btn:active { transform: scale(0.98); }
-
-.strava-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
-.strava-info-box {
-background: var(–card);
-border: 1px solid var(–border2);
-border-radius: 2px;
-padding: 12px;
-text-align: center;
-}
-.strava-info-val {
-font-family: ‘Barlow Condensed’, sans-serif;
-font-weight: 900;
-font-size: 24px;
-color: #fc4c02;
-line-height: 1;
-margin-bottom: 3px;
-}
-.strava-info-lbl { font-size: 9px; color: var(–muted); letter-spacing: 0.1em; }
-
-.activity-card {
-background: var(–card);
-border: 1px solid var(–border2);
-border-radius: 2px;
-padding: 14px;
-margin-bottom: 8px;
-position: relative;
-overflow: hidden;
-}
-.activity-card::before {
-content: ‘’;
-position: absolute;
-left: 0; top: 0; bottom: 0;
-width: 3px;
-background: #fc4c02;
-}
-.act-card-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
-.act-card-name {
-font-family: ‘Oswald’, sans-serif;
-font-weight: 600;
-font-size: 15px;
-letter-spacing: 0.05em;
-text-transform: uppercase;
-}
-.act-card-date { font-size: 9px; color: var(–muted); letter-spacing: 0.08em; }
-.act-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 6px; }
-.act-stat { text-align: center; }
-.act-stat-val {
-font-family: ‘Barlow Condensed’, sans-serif;
-font-weight: 700;
-font-size: 18px;
-color: #fc4c02;
-line-height: 1;
-}
-.act-stat-lbl { font-size: 8px; color: var(–muted); letter-spacing: 0.08em; margin-top: 2px; }
-
-.strava-steps {
-background: var(–card);
-border: 1px solid var(–border2);
-border-radius: 2px;
-padding: 14px;
-margin-top: 12px;
-}
-.step-item { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 12px; }
-.step-item:last-child { margin-bottom: 0; }
-.step-num {
-width: 24px; height: 24px;
-border-radius: 2px;
-background: rgba(252,76,2,0.15);
-border: 1px solid rgba(252,76,2,0.3);
-display: flex; align-items: center; justify-content: center;
-font-family: ‘Barlow Condensed’, sans-serif;
-font-weight: 700;
-font-size: 13px;
-color: #fc4c02;
-flex-shrink: 0;
-}
-.step-text { font-size: 12px; color: rgba(240,240,255,0.7); line-height: 1.5; }
-.step-text strong { color: var(–text); }
-
-/* PROFIL */
-.profile-hero {
-background: linear-gradient(135deg, rgba(200,255,0,0.06), rgba(0,229,255,0.03));
-border: 1px solid rgba(200,255,0,0.15);
-border-radius: 2px;
-padding: 16px;
-margin-bottom: 12px;
-display: flex;
-align-items: center;
-gap: 14px;
-position: relative;
-overflow: hidden;
-}
-.profile-hero::before {
-content: ‘’;
-position: absolute;
-top: 0; left: 0; right: 0;
-height: 2px;
-background: linear-gradient(90deg, var(–lime), var(–cyan));
-}
-.profile-avatar {
-width: 52px; height: 52px;
-border-radius: 2px;
-background: rgba(200,255,0,0.08);
-border: 1px solid rgba(200,255,0,0.2);
-display: flex; align-items: center; justify-content: center;
-font-size: 26px;
-flex-shrink: 0;
-}
-.profile-name {
-font-family: ‘Oswald’, sans-serif;
-font-weight: 700;
-font-size: 24px;
-letter-spacing: 0.08em;
-text-transform: uppercase;
-line-height: 1;
-}
-.profile-sub { font-size: 9px; color: var(–muted); letter-spacing: 0.1em; margin-top: 4px; }
-
-/* DETAIL PANEL */
-.detail-panel {
-position: fixed; inset: 0;
-background: var(–bg);
-z-index: 100;
-display: flex; flex-direction: column;
-max-width: 430px; margin: 0 auto;
-transform: translateX(100%);
-transition: transform 0.3s cubic-bezier(.4,0,.2,1);
-}
-.detail-panel.open { transform: translateX(0); }
-.detail-hdr {
-padding: 14px 16px 12px;
-border-bottom: 1px solid var(–border2);
-display: flex; align-items: center; gap: 12px;
-flex-shrink: 0;
-background: rgba(200,255,0,0.02);
-}
-.back-btn {
-width: 32px; height: 32px;
-border-radius: 2px;
-background: var(–card);
-border: 1px solid var(–border2);
-cursor: pointer;
-display: flex; align-items: center; justify-content: center;
-font-size: 18px; color: var(–text);
-font-family: ‘Barlow Condensed’, sans-serif;
-}
-.detail-title {
-font-family: ‘Oswald’, sans-serif;
-font-weight: 700;
-font-size: 16px;
-letter-spacing: 0.08em;
-text-transform: uppercase;
-flex: 1;
-color: var(–lime);
-}
-.detail-body { flex: 1; overflow-y: auto; padding: 16px; scrollbar-width: none; }
-.detail-body::-webkit-scrollbar { display: none; }
-
-/* ACTIVITY MODAL */
-.act-modal {
-position: fixed; inset: 0;
-background: rgba(2,2,5,0.9);
-z-index: 200;
-display: flex; align-items: flex-end; justify-content: center;
-opacity: 0; pointer-events: none;
-transition: opacity 0.25s;
-backdrop-filter: blur(4px);
-}
-.act-modal.open { opacity: 1; pointer-events: all; }
-.act-modal-inner {
-background: var(–bg2);
-border: 1px solid var(–border2);
-border-top: 2px solid var(–lime);
-border-radius: 0;
-padding: 20px;
-width: 100%; max-width: 430px;
-transform: translateY(20px);
-transition: transform 0.25s;
-}
-.act-modal.open .act-modal-inner { transform: translateY(0); }
-.modal-title {
-font-family: ‘Oswald’, sans-serif;
-font-weight: 700;
-font-size: 20px;
-letter-spacing: 0.08em;
-text-transform: uppercase;
-color: var(–lime);
-margin-bottom: 2px;
-}
-.modal-date { font-size: 10px; color: var(–muted); letter-spacing: 0.1em; margin-bottom: 16px; }
-.act-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
-.act-btn {
-padding: 14px;
-border-radius: 2px;
-border: 1px solid var(–border2);
-background: var(–card);
-cursor: pointer;
-display: flex; flex-direction: column;
-align-items: center; gap: 5px;
-transition: all 0.2s;
-}
-.act-btn:active { transform: scale(0.95); }
-.act-btn.selected { border-width: 2px; }
-.act-btn-ico { font-size: 28px; }
-.act-btn-lbl {
-font-family: ‘Barlow Condensed’, sans-serif;
-font-weight: 600;
-font-size: 11px;
-color: var(–muted);
-letter-spacing: 0.1em;
-text-transform: uppercase;
-}
-.act-btn.selected .act-btn-lbl { color: var(–text); }
-.modal-acts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.modal-save {
-background: var(–lime); color: #000;
-border: none; border-radius: 2px;
-padding: 14px;
-font-family: ‘Oswald’, sans-serif;
-font-weight: 700; font-size: 15px;
-letter-spacing: 0.1em; text-transform: uppercase;
-cursor: pointer; transition: all 0.2s;
-}
-.modal-save:active { transform: scale(0.97); }
-.modal-cancel {
-background: var(–card); color: var(–muted);
-border: 1px solid var(–border2); border-radius: 2px;
-padding: 14px;
-font-family: ‘Oswald’, sans-serif;
-font-weight: 600; font-size: 15px;
-letter-spacing: 0.1em; text-transform: uppercase;
-cursor: pointer;
-}
-.modal-del {
-background: rgba(255,0,80,0.08);
-color: var(–pink);
-border: 1px solid rgba(255,0,80,0.2);
-border-radius: 2px;
-padding: 10px;
-font-size: 11px;
-font-family: ‘DM Mono’, monospace;
-cursor: pointer;
-margin-top: 8px;
-width: 100%;
-letter-spacing: 0.06em;
-}
-
-/* GLITCH ANIMATION */
-@keyframes glitch {
-0%,100%{transform:translateX(0)}
-20%{transform:translateX(-2px)}
-40%{transform:translateX(2px)}
-60%{transform:translateX(-1px)}
-80%{transform:translateX(1px)}
-}
-
-/* FADE UP */
-@keyframes fadeUp {
-from{opacity:0;transform:translateY(10px)}
-to{opacity:1;transform:translateY(0)}
-}
-.fu{animation:fadeUp 0.4s ease forwards;opacity:0}
-.fu:nth-child(1){animation-delay:.03s}.fu:nth-child(2){animation-delay:.06s}
-.fu:nth-child(3){animation-delay:.09s}.fu:nth-child(4){animation-delay:.12s}
-.fu:nth-child(5){animation-delay:.15s}.fu:nth-child(6){animation-delay:.18s}
-.fu:nth-child(7){animation-delay:.21s}.fu:nth-child(8){animation-delay:.24s}
-.fu:nth-child(9){animation-delay:.27s}.fu:nth-child(10){animation-delay:.30s}
-.fu:nth-child(11){animation-delay:.33s}.fu:nth-child(12){animation-delay:.36s}
-.fu:nth-child(13){animation-delay:.39s}.fu:nth-child(14){animation-delay:.42s}
+/* ── MODAL ── */
+.act-modal{position:fixed;inset:0;background:rgba(2,2,5,.85);z-index:200;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);}
+.act-modal.open{opacity:1;pointer-events:all;}
+.act-modal-inner{background:var(–bg2);border:1px solid var(–border2);border-top:2px solid var(–lime);padding:20px;width:100%;max-width:430px;transform:translateY(30px);transition:transform .35s cubic-bezier(.2,0,.1,1);}
+.act-modal.open .act-modal-inner{transform:translateY(0);}
+.modal-title{font-family:‘Oswald’,sans-serif;font-weight:700;font-size:20px;letter-spacing:.08em;text-transform:uppercase;color:var(–lime);margin-bottom:2px;}
+.modal-date{font-size:10px;color:var(–muted);letter-spacing:.1em;margin-bottom:16px;}
+.act-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.act-btn{padding:14px;border-radius:3px;border:1px solid var(–border2);background:var(–card);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;transition:all .2s cubic-bezier(.34,1.56,.64,1);}
+.act-btn:active{transform:scale(.91);}
+.act-btn-ico{font-size:30px;}
+.act-btn-lbl{font-family:‘Barlow Condensed’,sans-serif;font-weight:600;font-size:11px;color:var(–muted);letter-spacing:.1em;text-transform:uppercase;}
+.act-btn.selected .act-btn-lbl{color:var(–text);}
+.modal-acts{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.modal-save{background:var(–lime);color:#000;border:none;border-radius:3px;padding:14px;font-family:‘Oswald’,sans-serif;font-weight:700;font-size:15px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .2s cubic-bezier(.34,1.56,.64,1);box-shadow:0 0 20px rgba(200,255,0,.2);}
+.modal-save:active{transform:scale(.96);}
+.modal-cancel{background:var(–card);color:var(–muted);border:1px solid var(–border2);border-radius:3px;padding:14px;font-family:‘Oswald’,sans-serif;font-weight:600;font-size:15px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .15s;}
+.modal-cancel:active{transform:scale(.96);}
+.modal-del{background:rgba(255,0,80,.06);color:var(–pink);border:1px solid rgba(255,0,80,.15);border-radius:3px;padding:10px;font-size:11px;font-family:‘DM Mono’,monospace;cursor:pointer;margin-top:8px;width:100%;letter-spacing:.06em;}
+@keyframes ripOut{to{width:80px;height:80px;opacity:0;}}
 </style>
 
 </head>
 <body>
+<script>document.documentElement.style.colorScheme='dark';document.documentElement.style.background='#020205';</script>
+<canvas id="pc"></canvas>
+<div class="sl"></div>
+<div id="splash">
+  <div class="sp-logo">MARU</div>
+  <div class="sp-sub">HEALTH OS · v2.0</div>
+  <div class="sp-bar"><div class="sp-fill"></div></div>
+</div>
 
 <div class="app-header">
   <div class="header-top">
-    <div class="app-logo">MAROUANE <span>·</span> OS</div>
-    <div class="header-badge">
-      <div class="badge-dot"></div>
-      <div class="badge-text">ACTIF</div>
-    </div>
+    <div class="app-logo">MARU <span>·</span> OS</div>
+    <div class="header-badge"><div class="badge-dot"></div><div class="badge-text">ACTIF</div></div>
   </div>
   <div class="header-sub" id="headerDay">CHARGEMENT...</div>
 </div>
 
 <div class="pages">
 
-<!-- ═══════════ TODAY ═══════════ -->
+<!-- TODAY -->
 
-<div class="page active" id="page-today">
-  <div style="margin-bottom:12px">
-    <div style="font-size:9px;color:var(--muted);letter-spacing:0.15em;margin-bottom:4px">// TABLEAU DE BORD QUOTIDIEN</div>
+<div class="page active" id="page-today"><div class="stagger">
+  <div>
+    <div style="font-size:9px;color:var(--muted);letter-spacing:.15em;margin-bottom:4px">// TABLEAU DE BORD</div>
     <div class="sec-title" id="todayTitle">MAR <span class="hi">22</span></div>
-    <div style="font-size:9px;color:var(--muted);letter-spacing:0.1em;margin-top:2px">MARS 2026 · CHALLENGE J47/100 · IF 14H–22H</div>
+    <div style="font-size:9px;color:var(--muted);letter-spacing:.1em;margin-top:2px">MARS 2026 · J47/100 · IF 14H–22H · HALAL</div>
   </div>
-
   <div class="cheat-banner" id="cheatBanner">
     <div class="cheat-title">⚡ JOUR LIBRE — MAR / JEU</div>
-    <div class="cheat-sub">PETIT DÉJ + DÉJEUNER LIBRES · DÎNER RAISONNABLE · ~2200 KCAL</div>
+    <div class="cheat-sub">PETIT DÉJ + DÉJEUNER LIBRES · DÎNER ~700 KCAL · ~2200 KCAL TOTAL</div>
   </div>
-
-  <!-- Challenge bar -->
-
-  <div class="hud-card fu" style="margin-bottom:8px">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-      <div style="font-size:9px;color:var(--muted);letter-spacing:0.12em">CHALLENGE 100 JOURS</div>
-      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:20px;color:var(--lime)">47<span style="font-size:13px;color:var(--muted)">/100</span></div>
-    </div>
-    <div class="prog-track">
-      <div class="prog-fill" style="width:47%;background:linear-gradient(90deg,var(--lime),var(--cyan))"></div>
-    </div>
-    <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--muted);margin-top:4px">
-      <span style="color:var(--lime)">J47 — 47% ✓</span>
-      <span>FIN LE 12/05/2026</span>
+  <div class="challenge-ring">
+    <svg width="80" height="80" viewBox="0 0 80 80" style="flex-shrink:0">
+      <circle cx="40" cy="40" r="34" fill="none" stroke="#1e1e3a" stroke-width="6"/>
+      <circle cx="40" cy="40" r="34" fill="none" stroke="url(#rg)" stroke-width="6" stroke-dasharray="213.6" stroke-dashoffset="113.2" stroke-linecap="round" transform="rotate(-90 40 40)"/>
+      <defs><linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#c8ff00"/><stop offset="100%" style="stop-color:#00e5ff"/></linearGradient></defs>
+      <text x="40" y="36" text-anchor="middle" font-family="Barlow Condensed" font-weight="900" font-size="18" fill="#c8ff00">47</text>
+      <text x="40" y="50" text-anchor="middle" font-family="DM Mono" font-size="8" fill="#44445a">/100</text>
+    </svg>
+    <div style="flex:1">
+      <div class="ring-title">J47 · 47%</div>
+      <div class="ring-sub">CHALLENGE 100 JOURS</div>
+      <div class="prog-track" style="margin:8px 0 4px"><div class="prog-fill anim" style="width:47%"></div></div>
+      <div class="ring-days">FIN LE 12 MAI 2026 · 53 JOURS RESTANTS</div>
     </div>
   </div>
-
-  <!-- Macros -->
-
-  <div class="stat-grid-3" style="margin-bottom:8px">
-    <div class="stat-box lime fu"><div class="stat-val" style="color:var(--lime)">3150</div><div class="stat-label">KCAL OBJ</div></div>
-    <div class="stat-box cyan fu"><div class="stat-val" style="color:var(--cyan)">210g</div><div class="stat-label">PROTÉINES</div></div>
-    <div class="stat-box orange fu"><div class="stat-val" style="color:var(--orange)">-400</div><div class="stat-label">DÉFICIT/J</div></div>
+  <div class="stat-grid-3">
+    <div class="stat-box lime"><div class="stat-val" style="color:var(--lime)">3150</div><div class="stat-label">KCAL OBJ</div></div>
+    <div class="stat-box cyan"><div class="stat-val" style="color:var(--cyan)">210g</div><div class="stat-label">PROTÉINES</div></div>
+    <div class="stat-box orange"><div class="stat-val" style="color:var(--orange)">-400</div><div class="stat-label">DÉFICIT/J</div></div>
   </div>
-
-  <!-- Week -->
-
   <div class="week-strip">
-    <div class="w-day fu"><div class="wd-n">LUN</div><div class="wd-ic">🥗</div><div class="wd-k">3150</div></div>
-    <div class="w-day cheat fu"><div class="wd-n">MAR</div><div class="wd-ic">🍕</div><div class="wd-k">~2200</div></div>
-    <div class="w-day fu"><div class="wd-n">MER</div><div class="wd-ic">🥗</div><div class="wd-k">3150</div></div>
-    <div class="w-day cheat fu"><div class="wd-n">JEU</div><div class="wd-ic">🍔</div><div class="wd-k">~2200</div></div>
-    <div class="w-day fu"><div class="wd-n">VEN</div><div class="wd-ic">🥗</div><div class="wd-k">3150</div></div>
-    <div class="w-day fu"><div class="wd-n">SAM</div><div class="wd-ic">🥗</div><div class="wd-k">3150</div></div>
-    <div class="w-day fu"><div class="wd-n">DIM</div><div class="wd-ic">🥗</div><div class="wd-k">3150</div></div>
+    <div class="w-day"><div class="wd-n">LUN</div><div class="wd-ic">🥗</div><div class="wd-k">3150</div></div>
+    <div class="w-day cheat"><div class="wd-n">MAR</div><div class="wd-ic">🍕</div><div class="wd-k">~2200</div></div>
+    <div class="w-day"><div class="wd-n">MER</div><div class="wd-ic">🥗</div><div class="wd-k">3150</div></div>
+    <div class="w-day cheat"><div class="wd-n">JEU</div><div class="wd-ic">🍔</div><div class="wd-k">~2200</div></div>
+    <div class="w-day"><div class="wd-n">VEN</div><div class="wd-ic">🥗</div><div class="wd-k">3150</div></div>
+    <div class="w-day"><div class="wd-n">SAM</div><div class="wd-ic">🥗</div><div class="wd-k">3150</div></div>
+    <div class="w-day"><div class="wd-n">DIM</div><div class="wd-ic">🥗</div><div class="wd-k">3150</div></div>
   </div>
-
-  <!-- Todo progress -->
-
-  <div style="font-size:9px;color:var(--muted);letter-spacing:0.15em;text-transform:uppercase;margin:12px 0 6px;display:flex;align-items:center;gap:8px">
-    <span>// MA JOURNÉE</span>
-    <div style="flex:1;height:1px;background:var(--border2)"></div>
-    <span id="todoProgressLabel" style="color:var(--lime)">0/11</span>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+    <div style="font-size:9px;color:var(--muted);letter-spacing:.15em">// MA JOURNÉE</div>
+    <div style="font-size:9px;color:var(--lime)" id="todoProgressLabel">0/11 · 0%</div>
   </div>
-  <div class="prog-track" style="margin-bottom:10px">
-    <div class="prog-fill" id="todoProgressBar" style="width:0%;background:var(--lime)"></div>
-  </div>
+  <div class="prog-track" style="margin-bottom:10px"><div class="prog-fill" id="todoProgressBar" style="width:0%"></div></div>
+  <div class="todo-item" onclick="toggleTodo(this)"><div class="todo-check"></div><div><div class="todo-title">🍎 Vinaigre de cidre dilué</div><div class="todo-time">RÉVEIL · À JEUN · 1CS / 250ML · PAILLE</div></div></div>
+  <div class="todo-item" onclick="toggleTodo(this)"><div class="todo-check"></div><div><div class="todo-title">🍃 Ashwagandha 300mg</div><div class="todo-time">RÉVEIL · AVEC LE VINAIGRE</div></div></div>
+  <div class="todo-item" onclick="toggleTodo(this)"><div class="todo-check"></div><div><div class="todo-title">🥗 Repas 1 — 14h00</div><div class="todo-time">CHARDON-MARIE + OMÉGA-3 + CURCUMINE + MULTIVIT</div></div></div>
+  <div class="todo-item" onclick="toggleTodo(this)"><div class="todo-check"></div><div><div class="todo-title">🌱 Berbérine 500mg</div><div class="todo-time">15 MIN AVANT REPAS 1 · 13H45</div></div></div>
+  <div class="todo-item" onclick="toggleTodo(this)"><div class="todo-check"></div><div><div class="todo-title">🥜 Collation — 17h00</div><div class="todo-time">YAOURT + FLOCONS / NOIX + FRUIT</div></div></div>
+  <div class="todo-item" onclick="toggleTodo(this)"><div class="todo-check"></div><div><div class="todo-title">💊 Créatine + Bêta-Alanine</div><div class="todo-time">30 MIN AVANT ENTRAÎNEMENT</div></div></div>
+  <div class="todo-item" onclick="toggleTodo(this)"><div class="todo-check"></div><div><div class="todo-title">🌱 Berbérine 500mg</div><div class="todo-time">15 MIN AVANT DÎNER · 19H45</div></div></div>
+  <div class="todo-item" onclick="toggleTodo(this)"><div class="todo-check"></div><div><div class="todo-title">🍽️ Repas 2 — 20h00</div><div class="todo-time">CHARDON-MARIE + OMÉGA-3 + CURCUMINE</div></div></div>
+  <div class="todo-item" onclick="toggleTodo(this)"><div class="todo-check"></div><div><div class="todo-title">🏋️ Entraînement</div><div class="todo-time">POST : WHEY HALAL + BCAA IMMÉDIATEMENT</div></div></div>
+  <div class="todo-item" onclick="toggleTodo(this)"><div class="todo-check"></div><div><div class="todo-title">🌙 Routine coucher</div><div class="todo-time">BERBÉRINE + ASHWAGANDHA + CERISE NOIRE</div></div></div>
+  <div class="todo-item" onclick="toggleTodo(this)"><div class="todo-check"></div><div><div class="todo-title">💧 2.5L d'eau</div><div class="todo-time">TOUT AU LONG DE LA JOURNÉE</div></div></div>
+</div></div>
 
-  <div class="todo-item fu" onclick="toggleTodo(this)"><div class="todo-check"></div><div class="todo-content"><div class="todo-title">🍎 Vinaigre de cidre dilué</div><div class="todo-time">AU RÉVEIL · À JEUN · 1CS DANS 250ML EAU</div></div></div>
-  <div class="todo-item fu" onclick="toggleTodo(this)"><div class="todo-check"></div><div class="todo-content"><div class="todo-title">🍃 Ashwagandha 300mg</div><div class="todo-time">AU RÉVEIL · AVEC LE VINAIGRE</div></div></div>
-  <div class="todo-item fu" onclick="toggleTodo(this)"><div class="todo-check"></div><div class="todo-content"><div class="todo-title">🥗 Repas 1 — 14h00</div><div class="todo-time">CHARDON-MARIE + OMÉGA-3 + CURCUMINE + MULTIVIT</div></div></div>
-  <div class="todo-item fu" onclick="toggleTodo(this)"><div class="todo-check"></div><div class="todo-content"><div class="todo-title">🌱 Berbérine 500mg</div><div class="todo-time">15 MIN AVANT DÉJEUNER</div></div></div>
-  <div class="todo-item fu" onclick="toggleTodo(this)"><div class="todo-check"></div><div class="todo-content"><div class="todo-title">🥜 Collation — 17h00</div><div class="todo-time">YAOURT GREC + FLOCONS / NOIX + FRUIT</div></div></div>
-  <div class="todo-item fu" onclick="toggleTodo(this)"><div class="todo-check"></div><div class="todo-content"><div class="todo-title">💊 Créatine + Bêta-Alanine</div><div class="todo-time">30 MIN AVANT ENTRAÎNEMENT</div></div></div>
-  <div class="todo-item fu" onclick="toggleTodo(this)"><div class="todo-check"></div><div class="todo-content"><div class="todo-title">🌱 Berbérine 500mg</div><div class="todo-time">15 MIN AVANT DÎNER</div></div></div>
-  <div class="todo-item fu" onclick="toggleTodo(this)"><div class="todo-check"></div><div class="todo-content"><div class="todo-title">🍽️ Repas 2 — 20h00</div><div class="todo-time">CHARDON-MARIE + OMÉGA-3 + CURCUMINE</div></div></div>
-  <div class="todo-item fu" onclick="toggleTodo(this)"><div class="todo-check"></div><div class="todo-content"><div class="todo-title">🏋️ Entraînement</div><div class="todo-time">POST : WHEY HALAL + BCAA IMMÉDIATEMENT</div></div></div>
-  <div class="todo-item fu" onclick="toggleTodo(this)"><div class="todo-check"></div><div class="todo-content"><div class="todo-title">🌙 Routine coucher</div><div class="todo-time">BERBÉRINE + ASHWAGANDHA + CERISE NOIRE</div></div></div>
-  <div class="todo-item fu" onclick="toggleTodo(this)"><div class="todo-check"></div><div class="todo-content"><div class="todo-title">💧 2.5L d'eau</div><div class="todo-time">À RÉPARTIR SUR TOUTE LA JOURNÉE</div></div></div>
-</div>
+<!-- COMPLÉMENTS -->
 
-<!-- ═══════════ COMPLÉMENTS ═══════════ -->
-
-<div class="page" id="page-supps">
+<div class="page" id="page-supps"><div class="stagger">
   <div class="sec-title">MES <span class="hi">COMPLÉMENTS</span></div>
   <div class="sec-sub">CLIQUER POUR DÉTAILS · DOSE · TIMING</div>
+  <div style="font-size:9px;color:var(--muted);letter-spacing:.15em;margin-bottom:6px">// SANTÉ & PROTECTION</div>
+  <div class="hud-card clickable" onclick="openSupp('chardon')"><div class="card-row"><div class="card-left"><div class="card-icon-wrap" style="background:rgba(200,255,0,.05)">🌿</div><div><div class="card-name">Chardon-Marie</div><div class="card-sub">NOW FOODS · 300MG · SILYMARINE 240MG</div></div></div><div class="card-arrow">›</div></div></div>
+  <div class="hud-card cyan clickable" onclick="openSupp('omega3')"><div class="card-row"><div class="card-left"><div class="card-icon-wrap" style="background:rgba(0,229,255,.05)">🐟</div><div><div class="card-name">Oméga-3 Fish Oil</div><div class="card-sub">CGN · 360MG EPA + 240MG DHA · 240 CAPS</div></div></div><div class="card-arrow">›</div></div></div>
+  <div class="hud-card orange clickable" onclick="openSupp('berberin')"><div class="card-row"><div class="card-left"><div class="card-icon-wrap" style="background:rgba(255,107,0,.05)">🌱</div><div><div class="card-name">Berbérine</div><div class="card-sub">CGN · 500MG · 3X/JOUR AVANT REPAS</div></div></div><div class="card-arrow">›</div></div></div>
+  <div class="hud-card clickable" onclick="openSupp('curcumine')"><div class="card-row"><div class="card-left"><div class="card-icon-wrap" style="background:rgba(255,215,0,.05)">💛</div><div><div class="card-name">Curcumine + Pipérine</div><div class="card-sub">CGN SILYMARIN COMPLEX · 360 CAPS</div></div></div><div class="card-arrow">›</div></div></div>
+  <div class="hud-card cyan clickable" onclick="openSupp('ashwa')"><div class="card-row"><div class="card-left"><div class="card-icon-wrap" style="background:rgba(0,229,255,.05)">🍃</div><div><div class="card-name">Ashwagandha KSM-66</div><div class="card-sub">JARROW · 300MG · EN STOCK ✓</div></div></div><div class="card-arrow">›</div></div></div>
+  <div class="hud-card clickable" onclick="openSupp('multi')"><div class="card-row"><div class="card-left"><div class="card-icon-wrap" style="background:rgba(124,58,237,.05)">💊</div><div><div class="card-name">Multivitamines Two-Per-Day</div><div class="card-sub">LIFE EXTENSION · 120 CAPS · À COMMANDER</div></div></div><div class="card-arrow">›</div></div></div>
+  <div class="hud-card clickable" onclick="openSupp('cidre')"><div class="card-row"><div class="card-left"><div class="card-icon-wrap" style="background:rgba(168,230,163,.05)">🍎</div><div><div class="card-name">Vinaigre de Cidre</div><div class="card-sub">BRAGG · 1CS MATIN À JEUN</div></div></div><div class="card-arrow">›</div></div></div>
+  <div style="font-size:9px;color:var(--muted);letter-spacing:.15em;margin:14px 0 6px">// PERFORMANCE & RÉCUPÉRATION</div>
+  <div class="hud-card orange clickable" onclick="openSupp('creatine')"><div class="card-row"><div class="card-left"><div class="card-icon-wrap" style="background:rgba(255,107,0,.05)">⚡</div><div><div class="card-name">Créatine Monohydrate</div><div class="card-sub">5G · PRÉ-ENTRAÎNEMENT · EN STOCK ✓</div></div></div><div class="card-arrow">›</div></div></div>
+  <div class="hud-card orange clickable" onclick="openSupp('beta')"><div class="card-row"><div class="card-left"><div class="card-icon-wrap" style="background:rgba(255,107,0,.05)">🔥</div><div><div class="card-name">Bêta-Alanine</div><div class="card-sub">PRÉ-ENTRAÎNEMENT · EN STOCK ✓</div></div></div><div class="card-arrow">›</div></div></div>
+  <div class="hud-card cyan clickable" onclick="openSupp('whey')"><div class="card-row"><div class="card-left"><div class="card-icon-wrap" style="background:rgba(0,229,255,.05)">🥛</div><div><div class="card-name">Whey Protein Halal</div><div class="card-sub">POST-ENTRAÎNEMENT · EN STOCK ✓</div></div></div><div class="card-arrow">›</div></div></div>
+  <div class="hud-card cyan clickable" onclick="openSupp('bcaa')"><div class="card-row"><div class="card-left"><div class="card-icon-wrap" style="background:rgba(0,229,255,.05)">💪</div><div><div class="card-name">BCAA</div><div class="card-sub">POST-ENTRAÎNEMENT · EN STOCK ✓</div></div></div><div class="card-arrow">›</div></div></div>
+  <div class="hud-card pink clickable" onclick="openSupp('cerise')"><div class="card-row"><div class="card-left"><div class="card-icon-wrap" style="background:rgba(255,0,128,.05)">🍒</div><div><div class="card-name">Concentré Cerise Noire</div><div class="card-sub">SOIR · RÉCUPÉRATION · EN STOCK ✓</div></div></div><div class="card-arrow">›</div></div></div>
+</div></div>
 
-  <div style="font-size:9px;color:var(--muted);letter-spacing:0.15em;margin-bottom:6px">// SANTÉ & PROTECTION</div>
-  <div class="hud-card clickable fu" onclick="openSupp('chardon')"><div class="card-row"><div class="card-left" style="gap:11px"><div class="card-icon-wrap" style="background:rgba(200,255,0,0.05)">🌿</div><div><div class="card-name">Chardon-Marie</div><div class="card-sub">NOW FOODS · 300MG · SILYMARINE 240MG · 200 CAPS</div></div></div><div class="card-arrow">›</div></div></div>
-  <div class="hud-card cyan clickable fu" onclick="openSupp('omega3')"><div class="card-row"><div class="card-left" style="gap:11px"><div class="card-icon-wrap" style="background:rgba(0,229,255,0.05)">🐟</div><div><div class="card-name">Oméga-3 Fish Oil</div><div class="card-sub">CGN · 360MG EPA + 240MG DHA · 240 CAPS</div></div></div><div class="card-arrow">›</div></div></div>
-  <div class="hud-card orange clickable fu" onclick="openSupp('berberin')"><div class="card-row"><div class="card-left" style="gap:11px"><div class="card-icon-wrap" style="background:rgba(255,107,0,0.05)">🌱</div><div><div class="card-name">Berbérine</div><div class="card-sub">CGN · 500MG · 3X/JOUR AVANT REPAS</div></div></div><div class="card-arrow">›</div></div></div>
-  <div class="hud-card clickable fu" onclick="openSupp('curcumine')"><div class="card-row"><div class="card-left" style="gap:11px"><div class="card-icon-wrap" style="background:rgba(255,215,0,0.05)">💛</div><div><div class="card-name">Curcumine + Pipérine</div><div class="card-sub">CGN SILYMARIN COMPLEX · 360 CAPS</div></div></div><div class="card-arrow">›</div></div></div>
-  <div class="hud-card cyan clickable fu" onclick="openSupp('ashwa')"><div class="card-row"><div class="card-left" style="gap:11px"><div class="card-icon-wrap" style="background:rgba(0,229,255,0.05)">🍃</div><div><div class="card-name">Ashwagandha KSM-66</div><div class="card-sub">JARROW · 300MG · EN STOCK ✓</div></div></div><div class="card-arrow">›</div></div></div>
-  <div class="hud-card clickable fu" onclick="openSupp('multi')"><div class="card-row"><div class="card-left" style="gap:11px"><div class="card-icon-wrap" style="background:rgba(124,58,237,0.05)">💊</div><div><div class="card-name">Multivitamines Two-Per-Day</div><div class="card-sub">LIFE EXTENSION · 120 CAPS · À COMMANDER</div></div></div><div class="card-arrow">›</div></div></div>
-  <div class="hud-card clickable fu" onclick="openSupp('cidre')"><div class="card-row"><div class="card-left" style="gap:11px"><div class="card-icon-wrap" style="background:rgba(168,230,163,0.05)">🍎</div><div><div class="card-name">Vinaigre de Cidre Non Filtré</div><div class="card-sub">BRAGG · 1CS MATIN À JEUN</div></div></div><div class="card-arrow">›</div></div></div>
+<!-- REPAS -->
 
-  <div style="font-size:9px;color:var(--muted);letter-spacing:0.15em;margin:14px 0 6px">// PERFORMANCE & RÉCUPÉRATION</div>
-  <div class="hud-card orange clickable fu" onclick="openSupp('creatine')"><div class="card-row"><div class="card-left" style="gap:11px"><div class="card-icon-wrap" style="background:rgba(255,107,0,0.05)">⚡</div><div><div class="card-name">Créatine Monohydrate</div><div class="card-sub">5G · PRÉ-ENTRAÎNEMENT · EN STOCK ✓</div></div></div><div class="card-arrow">›</div></div></div>
-  <div class="hud-card orange clickable fu" onclick="openSupp('beta')"><div class="card-row"><div class="card-left" style="gap:11px"><div class="card-icon-wrap" style="background:rgba(255,107,0,0.05)">🔥</div><div><div class="card-name">Bêta-Alanine</div><div class="card-sub">PRÉ-ENTRAÎNEMENT · ENDURANCE · EN STOCK ✓</div></div></div><div class="card-arrow">›</div></div></div>
-  <div class="hud-card cyan clickable fu" onclick="openSupp('whey')"><div class="card-row"><div class="card-left" style="gap:11px"><div class="card-icon-wrap" style="background:rgba(0,229,255,0.05)">🥛</div><div><div class="card-name">Whey Protein Halal</div><div class="card-sub">POST-ENTRAÎNEMENT · IHERB · EN STOCK ✓</div></div></div><div class="card-arrow">›</div></div></div>
-  <div class="hud-card cyan clickable fu" onclick="openSupp('bcaa')"><div class="card-row"><div class="card-left" style="gap:11px"><div class="card-icon-wrap" style="background:rgba(0,229,255,0.05)">💪</div><div><div class="card-name">BCAA</div><div class="card-sub">POST-ENTRAÎNEMENT · EN STOCK ✓</div></div></div><div class="card-arrow">›</div></div></div>
-  <div class="hud-card pink clickable fu" onclick="openSupp('cerise')"><div class="card-row"><div class="card-left" style="gap:11px"><div class="card-icon-wrap" style="background:rgba(255,0,128,0.05)">🍒</div><div><div class="card-name">Concentré Cerise Noire</div><div class="card-sub">SOIR · RÉCUPÉRATION · EN STOCK ✓</div></div></div><div class="card-arrow">›</div></div></div>
-</div>
-
-<!-- ═══════════ REPAS ═══════════ -->
-
-<div class="page" id="page-meals">
+<div class="page" id="page-meals"><div class="stagger">
   <div class="sec-title">MES <span class="hi">REPAS</span></div>
   <div class="sec-sub">IF 16/8 · 14H–22H · HALAL · CALCUL AUTO</div>
-
   <div class="tracker-hud">
     <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:6px">
-      <div>
-        <div class="tracker-kcal" id="trackerTotal">0</div>
-        <div class="tracker-goal">/ 3150 KCAL OBJECTIF</div>
-      </div>
-      <div style="text-align:right">
-        <div class="tracker-status" id="trackerStatus">SÉLECTIONNE TES REPAS ↓</div>
-        <div class="tracker-remain" id="trackerRemain">3150 RESTANTS</div>
-      </div>
+      <div><div class="tracker-kcal" id="trackerTotal">0</div><div class="tracker-goal">/ 3150 KCAL OBJECTIF</div></div>
+      <div style="text-align:right"><div class="tracker-status" id="trackerStatus">SÉLECTIONNE TES REPAS ↓</div><div class="tracker-remain" id="trackerRemain">3150 RESTANTS</div></div>
     </div>
-    <div class="prog-track">
-      <div class="prog-fill" id="trackerBar" style="width:0%;background:linear-gradient(90deg,var(--lime),var(--cyan))"></div>
-    </div>
+    <div class="prog-track"><div class="prog-fill" id="trackerBar" style="width:0%"></div></div>
     <div class="tracker-macros">
       <div class="tm"><div class="tm-val" style="color:var(--cyan)" id="tProt">0g</div><div class="tm-lbl">PROTÉINES</div></div>
       <div class="tm"><div class="tm-val" style="color:var(--orange)" id="tGluc">0g</div><div class="tm-lbl">GLUCIDES</div></div>
       <div class="tm"><div class="tm-val" style="color:var(--pink)" id="tFib">0g</div><div class="tm-lbl">FIBRES</div></div>
     </div>
   </div>
-
   <div class="meal-sec">⏰ REPAS 1 — 14H</div>
   <div class="mtabs">
     <button class="mtab active" onclick="switchMeal(1,0,this)">🍗 POULET RIZ</button>
@@ -1194,19 +442,17 @@ to{opacity:1;transform:translateY(0)}
     <button class="mtab" onclick="switchMeal(1,2,this)">🥫 THON</button>
     <button class="mtab" onclick="switchMeal(1,3,this)">🍤 CREVETTES</button>
   </div>
-  <div class="rpanel active" id="m1-0"><div class="recipe-hud"><div class="recipe-top"><div class="recipe-emoji">🍗</div><div class="recipe-name">Bowl Poulet Riz & Légumes Crus</div><div class="recipe-badge">724 KCAL</div></div><div class="ing-row"><span class="ing-n">Blanc de poulet halal grillé</span><span class="ing-q">200g</span></div><div class="ing-row"><span class="ing-n">Riz basmati cuit</span><span class="ing-q">150g</span></div><div class="ing-row"><span class="ing-n">Avocat (demi)</span><span class="ing-q">75g</span></div><div class="ing-row"><span class="ing-n">Tomates cerises</span><span class="ing-q">100g</span></div><div class="ing-row"><span class="ing-n">Concombre</span><span class="ing-q">100g</span></div><div class="ing-row"><span class="ing-n">Roquette</span><span class="ing-q">30g</span></div><div class="ing-row"><span class="ing-n">Huile d'olive</span><span class="ing-q">15g</span></div><div class="ing-row"><span class="ing-n">Madame Loïk</span><span class="ing-q">30g</span></div><div class="macro-strip-recipe"><div class="mc"><div class="mc-v" style="color:var(--lime)">724</div><div class="mc-l">KCAL</div></div><div class="mc"><div class="mc-v" style="color:var(--cyan)">70g</div><div class="mc-l">PROT</div></div><div class="mc"><div class="mc-v" style="color:var(--orange)">57g</div><div class="mc-l">GLUC</div></div><div class="mc"><div class="mc-v" style="color:var(--pink)">8g</div><div class="mc-l">FIB</div></div></div><div class="prep-note">💡 Poulet halal grillé à sec. Légumes toujours crus. Sauce : huile olive + citron + sel.</div></div></div>
-  <div class="rpanel" id="m1-1"><div class="recipe-hud"><div class="recipe-top"><div class="recipe-emoji">🐟</div><div class="recipe-name">Bowl Saumon Avocat Roquette</div><div class="recipe-badge">815 KCAL</div></div><div class="ing-row"><span class="ing-n">Saumon grillé</span><span class="ing-q">180g</span></div><div class="ing-row"><span class="ing-n">Riz basmati cuit</span><span class="ing-q">120g</span></div><div class="ing-row"><span class="ing-n">Avocat entier</span><span class="ing-q">150g</span></div><div class="ing-row"><span class="ing-n">Roquette</span><span class="ing-q">40g</span></div><div class="ing-row"><span class="ing-n">Radis</span><span class="ing-q">80g</span></div><div class="ing-row"><span class="ing-n">Échalote</span><span class="ing-q">15g</span></div><div class="ing-row"><span class="ing-n">Huile d'olive</span><span class="ing-q">15g</span></div><div class="macro-strip-recipe"><div class="mc"><div class="mc-v" style="color:var(--lime)">815</div><div class="mc-l">KCAL</div></div><div class="mc"><div class="mc-v" style="color:var(--cyan)">53g</div><div class="mc-l">PROT</div></div><div class="mc"><div class="mc-v" style="color:var(--orange)">51g</div><div class="mc-l">GLUC</div></div><div class="mc"><div class="mc-v" style="color:var(--pink)">13g</div><div class="mc-l">FIB</div></div></div><div class="prep-note">💡 Sauce : huile olive + vinaigre de cidre + sel.</div></div></div>
-  <div class="rpanel" id="m1-2"><div class="recipe-hud"><div class="recipe-top"><div class="recipe-emoji">🥫</div><div class="recipe-name">Assiette Thon Pain Complet</div><div class="recipe-badge">475 KCAL</div></div><div class="ing-row"><span class="ing-n">Thon en boîte eau (x2)</span><span class="ing-q">240g</span></div><div class="ing-row"><span class="ing-n">Pain complet grillé (x2)</span><span class="ing-q">70g</span></div><div class="ing-row"><span class="ing-n">Madame Loïk (2cs)</span><span class="ing-q">60g</span></div><div class="ing-row"><span class="ing-n">Tomates cerises</span><span class="ing-q">150g</span></div><div class="ing-row"><span class="ing-n">Carottes râpées</span><span class="ing-q">100g</span></div><div class="ing-row"><span class="ing-n">Concombre</span><span class="ing-q">100g</span></div><div class="ing-row"><span class="ing-n">Huile d'olive</span><span class="ing-q">15g</span></div><div class="macro-strip-recipe"><div class="mc"><div class="mc-v" style="color:var(--lime)">475</div><div class="mc-l">KCAL</div></div><div class="mc"><div class="mc-v" style="color:var(--cyan)">69g</div><div class="mc-l">PROT</div></div><div class="mc"><div class="mc-v" style="color:var(--orange)">29g</div><div class="mc-l">GLUC</div></div><div class="mc"><div class="mc-v" style="color:var(--pink)">7g</div><div class="mc-l">FIB</div></div></div><div class="prep-note">💡 Repas le plus léger et protéiné. Parfait les jours de petit appétit.</div></div></div>
-  <div class="rpanel" id="m1-3"><div class="recipe-hud"><div class="recipe-top"><div class="recipe-emoji">🍤</div><div class="recipe-name">Bowl Crevettes Riz & Crudités</div><div class="recipe-badge">546 KCAL</div></div><div class="ing-row"><span class="ing-n">Crevettes halal décortiquées</span><span class="ing-q">250g</span></div><div class="ing-row"><span class="ing-n">Riz basmati cuit</span><span class="ing-q">150g</span></div><div class="ing-row"><span class="ing-n">Chou-fleur cru</span><span class="ing-q">100g</span></div><div class="ing-row"><span class="ing-n">Carottes crudités</span><span class="ing-q">100g</span></div><div class="ing-row"><span class="ing-n">Oignon rouge (demi)</span><span class="ing-q">50g</span></div><div class="ing-row"><span class="ing-n">Roquette</span><span class="ing-q">30g</span></div><div class="ing-row"><span class="ing-n">Huile d'olive</span><span class="ing-q">15g</span></div><div class="macro-strip-recipe"><div class="mc"><div class="mc-v" style="color:var(--lime)">546</div><div class="mc-l">KCAL</div></div><div class="mc"><div class="mc-v" style="color:var(--cyan)">60g</div><div class="mc-l">PROT</div></div><div class="mc"><div class="mc-v" style="color:var(--orange)">59g</div><div class="mc-l">GLUC</div></div><div class="mc"><div class="mc-v" style="color:var(--pink)">6g</div><div class="mc-l">FIB</div></div></div><div class="prep-note">💡 Crevettes sautées ail + paprika 5 min.</div></div></div>
-
+  <div class="rpanel active" id="m1-0"><div class="recipe-hud"><div class="recipe-top"><div class="recipe-emoji">🍗</div><div class="recipe-name">Bowl Poulet Riz & Légumes Crus</div><div class="recipe-badge">724 KCAL</div></div><div class="ing-row"><span class="ing-n">Blanc de poulet halal grillé</span><span class="ing-q">200g</span></div><div class="ing-row"><span class="ing-n">Riz basmati cuit</span><span class="ing-q">150g</span></div><div class="ing-row"><span class="ing-n">Avocat (demi)</span><span class="ing-q">75g</span></div><div class="ing-row"><span class="ing-n">Tomates cerises + Concombre</span><span class="ing-q">200g</span></div><div class="ing-row"><span class="ing-n">Roquette + Huile d'olive</span><span class="ing-q">45g</span></div><div class="macro-strip-recipe"><div class="mc"><div class="mc-v" style="color:var(--lime)">724</div><div class="mc-l">KCAL</div></div><div class="mc"><div class="mc-v" style="color:var(--cyan)">70g</div><div class="mc-l">PROT</div></div><div class="mc"><div class="mc-v" style="color:var(--orange)">57g</div><div class="mc-l">GLUC</div></div><div class="mc"><div class="mc-v" style="color:var(--pink)">8g</div><div class="mc-l">FIB</div></div></div><div class="prep-note">💡 Légumes toujours crus. Sauce : olive + citron + sel.</div></div></div>
+  <div class="rpanel" id="m1-1"><div class="recipe-hud"><div class="recipe-top"><div class="recipe-emoji">🐟</div><div class="recipe-name">Bowl Saumon Avocat Roquette</div><div class="recipe-badge">815 KCAL</div></div><div class="ing-row"><span class="ing-n">Saumon grillé</span><span class="ing-q">180g</span></div><div class="ing-row"><span class="ing-n">Riz basmati cuit</span><span class="ing-q">120g</span></div><div class="ing-row"><span class="ing-n">Avocat entier</span><span class="ing-q">150g</span></div><div class="ing-row"><span class="ing-n">Roquette + Radis</span><span class="ing-q">120g</span></div><div class="ing-row"><span class="ing-n">Huile d'olive</span><span class="ing-q">15g</span></div><div class="macro-strip-recipe"><div class="mc"><div class="mc-v" style="color:var(--lime)">815</div><div class="mc-l">KCAL</div></div><div class="mc"><div class="mc-v" style="color:var(--cyan)">53g</div><div class="mc-l">PROT</div></div><div class="mc"><div class="mc-v" style="color:var(--orange)">51g</div><div class="mc-l">GLUC</div></div><div class="mc"><div class="mc-v" style="color:var(--pink)">13g</div><div class="mc-l">FIB</div></div></div><div class="prep-note">💡 Sauce : huile olive + vinaigre de cidre + sel.</div></div></div>
+  <div class="rpanel" id="m1-2"><div class="recipe-hud"><div class="recipe-top"><div class="recipe-emoji">🥫</div><div class="recipe-name">Assiette Thon Pain Complet</div><div class="recipe-badge">475 KCAL</div></div><div class="ing-row"><span class="ing-n">Thon en boîte eau (x2)</span><span class="ing-q">240g</span></div><div class="ing-row"><span class="ing-n">Pain complet grillé (x2)</span><span class="ing-q">70g</span></div><div class="ing-row"><span class="ing-n">Madame Loïk</span><span class="ing-q">60g</span></div><div class="ing-row"><span class="ing-n">Tomates + Concombre</span><span class="ing-q">250g</span></div><div class="ing-row"><span class="ing-n">Huile d'olive</span><span class="ing-q">15g</span></div><div class="macro-strip-recipe"><div class="mc"><div class="mc-v" style="color:var(--lime)">475</div><div class="mc-l">KCAL</div></div><div class="mc"><div class="mc-v" style="color:var(--cyan)">69g</div><div class="mc-l">PROT</div></div><div class="mc"><div class="mc-v" style="color:var(--orange)">29g</div><div class="mc-l">GLUC</div></div><div class="mc"><div class="mc-v" style="color:var(--pink)">7g</div><div class="mc-l">FIB</div></div></div><div class="prep-note">💡 Repas le plus léger et protéiné.</div></div></div>
+  <div class="rpanel" id="m1-3"><div class="recipe-hud"><div class="recipe-top"><div class="recipe-emoji">🍤</div><div class="recipe-name">Bowl Crevettes Riz & Crudités</div><div class="recipe-badge">546 KCAL</div></div><div class="ing-row"><span class="ing-n">Crevettes halal</span><span class="ing-q">250g</span></div><div class="ing-row"><span class="ing-n">Riz basmati cuit</span><span class="ing-q">150g</span></div><div class="ing-row"><span class="ing-n">Chou-fleur + Carottes crus</span><span class="ing-q">200g</span></div><div class="ing-row"><span class="ing-n">Huile d'olive</span><span class="ing-q">15g</span></div><div class="macro-strip-recipe"><div class="mc"><div class="mc-v" style="color:var(--lime)">546</div><div class="mc-l">KCAL</div></div><div class="mc"><div class="mc-v" style="color:var(--cyan)">60g</div><div class="mc-l">PROT</div></div><div class="mc"><div class="mc-v" style="color:var(--orange)">59g</div><div class="mc-l">GLUC</div></div><div class="mc"><div class="mc-v" style="color:var(--pink)">6g</div><div class="mc-l">FIB</div></div></div><div class="prep-note">💡 Crevettes sautées ail + paprika 5 min.</div></div></div>
   <div class="meal-sec">⏰ COLLATION — 17H</div>
   <div class="coll-grid">
-    <div class="coll-card selected" id="coll-0" onclick="selColl(0)"><div class="coll-t">🥣 Option A</div><div class="coll-it">Flocons 60g<br>Yaourt grec 150g<br>Amandes 20g · Dattes 2</div><div class="coll-m">355 KCAL · 22G PROT</div></div>
-    <div class="coll-card" id="coll-1" onclick="selColl(1)"><div class="coll-t">🥜 Option B</div><div class="coll-it">Yaourt grec 200g<br>Noix de pécan 30g<br>Amandes 15g · 1 fruit</div><div class="coll-m">319 KCAL · 23G PROT</div></div>
-    <div class="coll-card" id="coll-2" onclick="selColl(2)"><div class="coll-t">🍳 Option C</div><div class="coll-it">2 œufs halal durs<br>Pain complet 1 tr.<br>Madame Loïk + tomates</div><div class="coll-m">168 KCAL · 12G PROT</div></div>
-    <div class="coll-card" id="coll-3" onclick="selColl(3)"><div class="coll-t">🐟 Option D</div><div class="coll-it">Sardines 1 boîte<br>Pain complet 1 tr.<br>Concombre + radis</div><div class="coll-m">218 KCAL · 22G PROT</div></div>
+    <div class="coll-card selected" id="coll-0" onclick="selColl(0)"><div class="coll-t">🥣 Option A</div><div class="coll-it">Flocons 60g · Yaourt 150g<br>Amandes 20g · Dattes 2</div><div class="coll-m">355 KCAL · 22G PROT</div></div>
+    <div class="coll-card" id="coll-1" onclick="selColl(1)"><div class="coll-t">🥜 Option B</div><div class="coll-it">Yaourt 200g · Noix 30g<br>Amandes 15g · 1 fruit</div><div class="coll-m">319 KCAL · 23G PROT</div></div>
+    <div class="coll-card" id="coll-2" onclick="selColl(2)"><div class="coll-t">🍳 Option C</div><div class="coll-it">2 œufs durs<br>Pain complet · Madame Loïk</div><div class="coll-m">168 KCAL · 12G PROT</div></div>
+    <div class="coll-card" id="coll-3" onclick="selColl(3)"><div class="coll-t">🐟 Option D</div><div class="coll-it">Sardines 1 boîte<br>Pain complet · Concombre</div><div class="coll-m">218 KCAL · 22G PROT</div></div>
   </div>
-
   <div class="meal-sec">⏰ REPAS 2 — 20H · ZÉRO RIZ</div>
   <div class="mtabs">
     <button class="mtab active c2" onclick="switchMeal(2,0,this)">🍗 POULET</button>
@@ -1214,194 +460,103 @@ to{opacity:1;transform:translateY(0)}
     <button class="mtab" onclick="switchMeal(2,2,this)">🥚 ŒUFS</button>
     <button class="mtab" onclick="switchMeal(2,3,this)">🍤 CREVETTES</button>
   </div>
-  <div class="rpanel active" id="m2-0"><div class="recipe-hud"><div class="recipe-top"><div class="recipe-emoji">🍗</div><div class="recipe-name">Poulet Grillé Grande Salade</div><div class="recipe-badge">696 KCAL</div></div><div class="ing-row"><span class="ing-n">Blanc de poulet halal</span><span class="ing-q">250g</span></div><div class="ing-row"><span class="ing-n">Roquette + salade</span><span class="ing-q">60g</span></div><div class="ing-row"><span class="ing-n">Avocat (demi)</span><span class="ing-q">75g</span></div><div class="ing-row"><span class="ing-n">Tomates cerises</span><span class="ing-q">150g</span></div><div class="ing-row"><span class="ing-n">Chou-fleur cru</span><span class="ing-q">100g</span></div><div class="ing-row"><span class="ing-n">Carottes crudités</span><span class="ing-q">80g</span></div><div class="ing-row"><span class="ing-n">Madame Loïk (2cs)</span><span class="ing-q">60g</span></div><div class="ing-row"><span class="ing-n">Noix de pécan</span><span class="ing-q">20g</span></div><div class="macro-strip-recipe"><div class="mc"><div class="mc-v" style="color:var(--lime)">696</div><div class="mc-l">KCAL</div></div><div class="mc"><div class="mc-v" style="color:var(--cyan)">86g</div><div class="mc-l">PROT</div></div><div class="mc"><div class="mc-v" style="color:var(--orange)">27g</div><div class="mc-l">GLUC</div></div><div class="mc"><div class="mc-v" style="color:var(--pink)">13g</div><div class="mc-l">FIB</div></div></div><div class="prep-note">💡 Soir = zéro riz. Max légumes. Madame Loïk en sauce salade.</div></div></div>
-  <div class="rpanel" id="m2-1"><div class="recipe-hud"><div class="recipe-top"><div class="recipe-emoji">🐟</div><div class="recipe-name">Saumon Vapeur Salade Complète</div><div class="recipe-badge">772 KCAL</div></div><div class="ing-row"><span class="ing-n">Saumon vapeur</span><span class="ing-q">200g</span></div><div class="ing-row"><span class="ing-n">Avocat entier</span><span class="ing-q">150g</span></div><div class="ing-row"><span class="ing-n">Roquette</span><span class="ing-q">50g</span></div><div class="ing-row"><span class="ing-n">Concombre</span><span class="ing-q">150g</span></div><div class="ing-row"><span class="ing-n">Radis</span><span class="ing-q">80g</span></div><div class="ing-row"><span class="ing-n">Oignon rouge</span><span class="ing-q">50g</span></div><div class="ing-row"><span class="ing-n">Amandes effilées</span><span class="ing-q">25g</span></div><div class="ing-row"><span class="ing-n">Huile d'olive</span><span class="ing-q">22g</span></div><div class="macro-strip-recipe"><div class="mc"><div class="mc-v" style="color:var(--lime)">772</div><div class="mc-l">KCAL</div></div><div class="mc"><div class="mc-v" style="color:var(--cyan)">57g</div><div class="mc-l">PROT</div></div><div class="mc"><div class="mc-v" style="color:var(--orange)">25g</div><div class="mc-l">GLUC</div></div><div class="mc"><div class="mc-v" style="color:var(--pink)">14g</div><div class="mc-l">FIB</div></div></div><div class="prep-note">💡 Vapeur = meilleure conservation des Oméga-3.</div></div></div>
-  <div class="rpanel" id="m2-2"><div class="recipe-hud"><div class="recipe-top"><div class="recipe-emoji">🥚</div><div class="recipe-name">Omelette + Bowl Flocons Protéiné</div><div class="recipe-badge">646 KCAL</div></div><div class="ing-row"><span class="ing-n">Œufs halal (x4)</span><span class="ing-q">240g</span></div><div class="ing-row"><span class="ing-n">Flocons d'avoine</span><span class="ing-q">80g</span></div><div class="ing-row"><span class="ing-n">Yaourt grec</span><span class="ing-q">150g</span></div><div class="ing-row"><span class="ing-n">Tomates cerises</span><span class="ing-q">100g</span></div><div class="ing-row"><span class="ing-n">Roquette</span><span class="ing-q">40g</span></div><div class="ing-row"><span class="ing-n">Amandes</span><span class="ing-q">20g</span></div><div class="ing-row"><span class="ing-n">Huile d'olive</span><span class="ing-q">15g</span></div><div class="macro-strip-recipe"><div class="mc"><div class="mc-v" style="color:var(--lime)">646</div><div class="mc-l">KCAL</div></div><div class="mc"><div class="mc-v" style="color:var(--cyan)">44g</div><div class="mc-l">PROT</div></div><div class="mc"><div class="mc-v" style="color:var(--orange)">44g</div><div class="mc-l">GLUC</div></div><div class="mc"><div class="mc-v" style="color:var(--pink)">7g</div><div class="mc-l">FIB</div></div></div><div class="prep-note">💡 Flocons froids avec yaourt + amandes = dessert protéiné.</div></div></div>
-  <div class="rpanel" id="m2-3"><div class="recipe-hud"><div class="recipe-top"><div class="recipe-emoji">🍤</div><div class="recipe-name">Crevettes Ail & Grande Salade</div><div class="recipe-badge">539 KCAL</div></div><div class="ing-row"><span class="ing-n">Crevettes halal</span><span class="ing-q">300g</span></div><div class="ing-row"><span class="ing-n">Roquette + salade</span><span class="ing-q">60g</span></div><div class="ing-row"><span class="ing-n">Avocat (demi)</span><span class="ing-q">75g</span></div><div class="ing-row"><span class="ing-n">Chou-fleur cru</span><span class="ing-q">120g</span></div><div class="ing-row"><span class="ing-n">Tomates cerises</span><span class="ing-q">100g</span></div><div class="ing-row"><span class="ing-n">Échalotes</span><span class="ing-q">30g</span></div><div class="ing-row"><span class="ing-n">Noix de pécan</span><span class="ing-q">25g</span></div><div class="ing-row"><span class="ing-n">Huile d'olive</span><span class="ing-q">15g</span></div><div class="macro-strip-recipe"><div class="mc"><div class="mc-v" style="color:var(--lime)">539</div><div class="mc-l">KCAL</div></div><div class="mc"><div class="mc-v" style="color:var(--cyan)">70g</div><div class="mc-l">PROT</div></div><div class="mc"><div class="mc-v" style="color:var(--orange)">19g</div><div class="mc-l">GLUC</div></div><div class="mc"><div class="mc-v" style="color:var(--pink)">10g</div><div class="mc-l">FIB</div></div></div><div class="prep-note">💡 Crevettes sautées ail + persil 5 min. Léger en glucides.</div></div></div>
-
-  <!-- Cheat days -->
-
+  <div class="rpanel active" id="m2-0"><div class="recipe-hud"><div class="recipe-top"><div class="recipe-emoji">🍗</div><div class="recipe-name">Poulet Grillé Grande Salade</div><div class="recipe-badge">696 KCAL</div></div><div class="ing-row"><span class="ing-n">Blanc de poulet halal</span><span class="ing-q">250g</span></div><div class="ing-row"><span class="ing-n">Roquette + Salade mélange</span><span class="ing-q">60g</span></div><div class="ing-row"><span class="ing-n">Avocat (demi)</span><span class="ing-q">75g</span></div><div class="ing-row"><span class="ing-n">Tomates + Chou-fleur crus</span><span class="ing-q">250g</span></div><div class="ing-row"><span class="ing-n">Madame Loïk + Noix pécan</span><span class="ing-q">80g</span></div><div class="macro-strip-recipe"><div class="mc"><div class="mc-v" style="color:var(--lime)">696</div><div class="mc-l">KCAL</div></div><div class="mc"><div class="mc-v" style="color:var(--cyan)">86g</div><div class="mc-l">PROT</div></div><div class="mc"><div class="mc-v" style="color:var(--orange)">27g</div><div class="mc-l">GLUC</div></div><div class="mc"><div class="mc-v" style="color:var(--pink)">13g</div><div class="mc-l">FIB</div></div></div><div class="prep-note">💡 Soir = zéro riz. Max légumes. Madame Loïk en sauce.</div></div></div>
+  <div class="rpanel" id="m2-1"><div class="recipe-hud"><div class="recipe-top"><div class="recipe-emoji">🐟</div><div class="recipe-name">Saumon Vapeur Salade</div><div class="recipe-badge">772 KCAL</div></div><div class="ing-row"><span class="ing-n">Saumon vapeur</span><span class="ing-q">200g</span></div><div class="ing-row"><span class="ing-n">Avocat entier</span><span class="ing-q">150g</span></div><div class="ing-row"><span class="ing-n">Roquette + Concombre</span><span class="ing-q">200g</span></div><div class="ing-row"><span class="ing-n">Amandes effilées + Huile olive</span><span class="ing-q">47g</span></div><div class="macro-strip-recipe"><div class="mc"><div class="mc-v" style="color:var(--lime)">772</div><div class="mc-l">KCAL</div></div><div class="mc"><div class="mc-v" style="color:var(--cyan)">57g</div><div class="mc-l">PROT</div></div><div class="mc"><div class="mc-v" style="color:var(--orange)">25g</div><div class="mc-l">GLUC</div></div><div class="mc"><div class="mc-v" style="color:var(--pink)">14g</div><div class="mc-l">FIB</div></div></div><div class="prep-note">💡 Vapeur = meilleure conservation des Oméga-3.</div></div></div>
+  <div class="rpanel" id="m2-2"><div class="recipe-hud"><div class="recipe-top"><div class="recipe-emoji">🥚</div><div class="recipe-name">Omelette + Bowl Flocons</div><div class="recipe-badge">646 KCAL</div></div><div class="ing-row"><span class="ing-n">Œufs halal (x4)</span><span class="ing-q">240g</span></div><div class="ing-row"><span class="ing-n">Flocons d'avoine</span><span class="ing-q">80g</span></div><div class="ing-row"><span class="ing-n">Yaourt grec</span><span class="ing-q">150g</span></div><div class="ing-row"><span class="ing-n">Tomates cerises + Amandes</span><span class="ing-q">120g</span></div><div class="macro-strip-recipe"><div class="mc"><div class="mc-v" style="color:var(--lime)">646</div><div class="mc-l">KCAL</div></div><div class="mc"><div class="mc-v" style="color:var(--cyan)">44g</div><div class="mc-l">PROT</div></div><div class="mc"><div class="mc-v" style="color:var(--orange)">44g</div><div class="mc-l">GLUC</div></div><div class="mc"><div class="mc-v" style="color:var(--pink)">7g</div><div class="mc-l">FIB</div></div></div><div class="prep-note">💡 Flocons froids + yaourt + amandes = dessert protéiné.</div></div></div>
+  <div class="rpanel" id="m2-3"><div class="recipe-hud"><div class="recipe-top"><div class="recipe-emoji">🍤</div><div class="recipe-name">Crevettes Ail & Salade</div><div class="recipe-badge">539 KCAL</div></div><div class="ing-row"><span class="ing-n">Crevettes halal</span><span class="ing-q">300g</span></div><div class="ing-row"><span class="ing-n">Roquette + Chou-fleur cru</span><span class="ing-q">180g</span></div><div class="ing-row"><span class="ing-n">Avocat (demi) + Noix pécan</span><span class="ing-q">100g</span></div><div class="macro-strip-recipe"><div class="mc"><div class="mc-v" style="color:var(--lime)">539</div><div class="mc-l">KCAL</div></div><div class="mc"><div class="mc-v" style="color:var(--cyan)">70g</div><div class="mc-l">PROT</div></div><div class="mc"><div class="mc-v" style="color:var(--orange)">19g</div><div class="mc-l">GLUC</div></div><div class="mc"><div class="mc-v" style="color:var(--pink)">10g</div><div class="mc-l">FIB</div></div></div><div class="prep-note">💡 Crevettes sautées ail + persil 5 min.</div></div></div>
   <div class="meal-sec">🍕 CHEAT DAYS — MAR & JEU</div>
-  <div class="hud-card orange" style="cursor:default">
-    <div style="font-family:'Oswald',sans-serif;font-weight:700;font-size:16px;color:var(--orange);letter-spacing:0.08em;margin-bottom:10px">JOURNÉE LIBRE STRUCTURÉE ~2200 KCAL</div>
-    <div style="display:flex;flex-direction:column;gap:6px">
-      <div style="padding:9px 11px;background:rgba(255,107,0,0.05);border-radius:2px;border-left:2px solid var(--orange)"><div style="font-size:9px;color:var(--orange);letter-spacing:0.1em;margin-bottom:3px">🌅 PETIT DÉJ · ~650 KCAL · LIBRE</div><div style="font-size:11px;color:rgba(240,240,255,0.6)">Croissant, pancakes, pain au chocolat... Profites-en.</div></div>
-      <div style="padding:9px 11px;background:rgba(255,107,0,0.05);border-radius:2px;border-left:2px solid var(--orange)"><div style="font-size:9px;color:var(--orange);letter-spacing:0.1em;margin-bottom:3px">☀️ DÉJEUNER · ~850 KCAL · LIBRE</div><div style="font-size:11px;color:rgba(240,240,255,0.6)">Restaurant, burger, pizza... C'est dans le plan, pas de culpabilité.</div></div>
-      <div style="padding:9px 11px;background:rgba(255,107,0,0.03);border-radius:2px;border-left:2px solid rgba(255,107,0,0.3)"><div style="font-size:9px;color:rgba(255,107,0,0.5);letter-spacing:0.1em;margin-bottom:3px">🌙 DÎNER · ~700 KCAL · RAISONNABLE</div><div style="font-size:11px;color:rgba(240,240,255,0.5)">Retour au protocole : protéines + légumes halal.</div></div>
+  <div class="hud-card orange">
+    <div style="font-family:'Oswald',sans-serif;font-weight:700;font-size:16px;color:var(--orange);margin-bottom:10px">~2200 KCAL · ENCORE EN DÉFICIT</div>
+    <div style="display:flex;flex-direction:column;gap:5px">
+      <div style="padding:9px 11px;background:rgba(255,107,0,.05);border-radius:3px;border-left:2px solid var(--orange)"><div style="font-size:9px;color:var(--orange);margin-bottom:2px">🌅 PETIT DÉJ · ~650 KCAL · LIBRE</div><div style="font-size:11px;color:rgba(240,240,255,.5)">Croissant, pancakes... Profites-en.</div></div>
+      <div style="padding:9px 11px;background:rgba(255,107,0,.05);border-radius:3px;border-left:2px solid var(--orange)"><div style="font-size:9px;color:var(--orange);margin-bottom:2px">☀️ DÉJEUNER · ~850 KCAL · LIBRE</div><div style="font-size:11px;color:rgba(240,240,255,.5)">Restaurant, burger... C'est dans le plan.</div></div>
+      <div style="padding:9px 11px;background:rgba(255,107,0,.03);border-radius:3px;border-left:2px solid rgba(255,107,0,.3)"><div style="font-size:9px;color:rgba(255,107,0,.5);margin-bottom:2px">🌙 DÎNER · ~700 KCAL · RAISONNABLE</div><div style="font-size:11px;color:rgba(240,240,255,.4)">Retour protocole : protéines + légumes.</div></div>
     </div>
   </div>
-</div>
+</div></div>
 
-<!-- ═══════════ OBJECTIFS ═══════════ -->
+<!-- OBJECTIFS -->
 
-<div class="page" id="page-objectifs">
+<div class="page" id="page-objectifs"><div class="stagger">
   <div class="sec-title">MES <span class="hi">OBJECTIFS</span></div>
-  <div class="sec-sub">TRACKER ACTIVITÉ · STREAK · CALENDRIER</div>
-
+  <div class="sec-sub">ACTIVITÉ · STREAK · CALENDRIER</div>
   <div class="streak-row">
-    <div class="streak-box fu">
-      <div class="streak-ico">🔥</div>
-      <div class="streak-num" style="color:var(--orange)" id="statStreak">0</div>
-      <div class="streak-lbl">STREAK</div>
-    </div>
-    <div class="streak-box fu">
-      <div class="streak-ico">📅</div>
-      <div class="streak-num" style="color:var(--lime)" id="statMonth">0</div>
-      <div class="streak-lbl">CE MOIS</div>
-    </div>
-    <div class="streak-box fu">
-      <div class="streak-ico">⚡</div>
-      <div class="streak-num" style="color:var(--cyan)" id="statTotal">0</div>
-      <div class="streak-lbl">TOTAL</div>
-    </div>
+    <div class="streak-box"><div class="streak-ico">🔥</div><div class="streak-num" style="color:var(--orange)" id="statStreak">0</div><div class="streak-lbl">STREAK</div></div>
+    <div class="streak-box"><div class="streak-ico">📅</div><div class="streak-num" style="color:var(--lime)" id="statMonth">0</div><div class="streak-lbl">CE MOIS</div></div>
+    <div class="streak-box"><div class="streak-ico">⚡</div><div class="streak-num" style="color:var(--cyan)" id="statTotal">0</div><div class="streak-lbl">TOTAL</div></div>
   </div>
-
   <div class="act-legend">
-    <div class="act-pill" style="background:rgba(200,255,0,0.08);color:var(--lime);border-color:rgba(200,255,0,0.2)">🏋️ MUSCU</div>
-    <div class="act-pill" style="background:rgba(0,229,255,0.08);color:var(--cyan);border-color:rgba(0,229,255,0.2)">🏃 CARDIO</div>
-    <div class="act-pill" style="background:rgba(124,58,237,0.08);color:var(--purple);border-color:rgba(124,58,237,0.2)">🏊 NATATION</div>
-    <div class="act-pill" style="background:rgba(255,107,0,0.08);color:var(--orange);border-color:rgba(255,107,0,0.2)">🚶 MARCHE</div>
+    <div class="act-pill" style="background:rgba(200,255,0,.08);color:var(--lime);border-color:rgba(200,255,0,.2)">🏋️ MUSCU</div>
+    <div class="act-pill" style="background:rgba(0,229,255,.08);color:var(--cyan);border-color:rgba(0,229,255,.2)">🏃 CARDIO</div>
+    <div class="act-pill" style="background:rgba(124,58,237,.08);color:var(--purple);border-color:rgba(124,58,237,.2)">🏊 NATATION</div>
+    <div class="act-pill" style="background:rgba(255,107,0,.08);color:var(--orange);border-color:rgba(255,107,0,.2)">🚶 MARCHE</div>
   </div>
-
   <div class="cal-nav">
     <button class="cal-nav-btn" onclick="calNav(-1)">‹</button>
     <div class="cal-month" id="calMonthTitle">MARS 2026</div>
     <button class="cal-nav-btn" onclick="calNav(1)">›</button>
   </div>
-
   <div class="cal-days-hdr">
-    <div class="cal-dname">L</div><div class="cal-dname">M</div><div class="cal-dname">M</div>
-    <div class="cal-dname">J</div><div class="cal-dname">V</div><div class="cal-dname">S</div><div class="cal-dname">D</div>
+    <div class="cal-dname">L</div><div class="cal-dname">M</div><div class="cal-dname">M</div><div class="cal-dname">J</div><div class="cal-dname">V</div><div class="cal-dname">S</div><div class="cal-dname">D</div>
   </div>
   <div class="cal-grid" id="calGrid"></div>
+  <div style="margin-top:12px;padding:11px 13px;background:var(--card);border:1px solid var(--border2);border-radius:3px;font-size:10px;color:var(--muted);line-height:1.6;border-left:2px solid var(--lime)">💡 Appuie sur un jour pour enregistrer ton activité.</div>
+</div></div>
 
-  <div style="margin-top:12px;padding:11px 13px;background:var(--card);border:1px solid var(--border2);border-radius:2px;font-size:10px;color:var(--muted);line-height:1.6;border-left:2px solid var(--lime)">
-    💡 Appuie sur un jour pour enregistrer ton activité. Chaque couleur = un type de séance. 🔥 = streak de jours consécutifs sans interruption.
-  </div>
-</div>
+<!-- STRAVA -->
 
-<!-- ═══════════ STRAVA ═══════════ -->
-
-<div class="page" id="page-strava">
+<div class="page" id="page-strava"><div class="stagger">
   <div class="sec-title">MON <span class="hi">SPORT</span></div>
-  <div class="sec-sub">STRAVA · GARMIN CONNECT · ACTIVITÉS</div>
-
+  <div class="sec-sub">STRAVA · GARMIN · AUTO</div>
   <div class="strava-hero">
     <div class="strava-logo">STRAVA</div>
-    <div class="strava-sub">CONNEXION API GRATUITE · IMPORT AUTO DEPUIS GARMIN</div>
-    <div style="font-size:11px;color:rgba(255,255,255,0.5);margin-bottom:14px;line-height:1.6">
-      Une fois connecté, tes séances Garmin apparaissent automatiquement ici après chaque sync. Zéro saisie manuelle.
-    </div>
-    <button class="strava-connect-btn" onclick="stravaConnect()">
-      <span style="font-size:20px">🔗</span>
-      CONNECTER MON COMPTE STRAVA
-    </button>
+    <div class="strava-sub">API GRATUITE · IMPORT AUTO DEPUIS GARMIN</div>
+    <div style="font-size:11px;color:rgba(255,255,255,.4);margin-bottom:14px;line-height:1.6">Tes séances Garmin apparaissent automatiquement après chaque sync. Zéro saisie manuelle.</div>
+    <button class="strava-connect-btn" onclick="stravaConnect()"><span style="font-size:20px">🔗</span> CONNECTER STRAVA</button>
   </div>
-
-  <!-- Flux automatique info -->
-
-  <div style="font-size:9px;color:var(--muted);letter-spacing:0.15em;margin-bottom:8px">// COMMENT ÇA MARCHE</div>
+  <div style="font-size:9px;color:var(--muted);letter-spacing:.15em;margin-bottom:8px">// COMMENT ÇA MARCHE</div>
   <div class="strava-steps">
-    <div class="step-item">
-      <div class="step-num">1</div>
-      <div class="step-text"><strong>Héberge l'app sur Netlify</strong> (gratuit, 5 min) pour avoir une vraie URL web qui peut communiquer avec l'API Strava.</div>
-    </div>
-    <div class="step-item">
-      <div class="step-num">2</div>
-      <div class="step-text"><strong>Crée une app Strava</strong> gratuite sur strava.com/settings/api — tu obtiens un Client ID et un Client Secret.</div>
-    </div>
-    <div class="step-item">
-      <div class="step-num">3</div>
-      <div class="step-text"><strong>Clique "Connecter"</strong> ci-dessus — tu autorises l'accès une seule fois. Strava redirige vers ton app avec un token.</div>
-    </div>
-    <div class="step-item">
-      <div class="step-num">4</div>
-      <div class="step-text"><strong>Tes séances Garmin</strong> apparaissent automatiquement ici après chaque sync Garmin → Strava. 🎯</div>
-    </div>
+    <div class="step-item"><div class="step-num">1</div><div class="step-text"><strong>Netlify héberge l'app</strong> — URL permanente nécessaire pour l'OAuth.</div></div>
+    <div class="step-item"><div class="step-num">2</div><div class="step-text"><strong>App Strava gratuite</strong> sur strava.com/settings/api → Client ID + Secret.</div></div>
+    <div class="step-item"><div class="step-num">3</div><div class="step-text"><strong>Échange OAuth</strong> → refresh token permanent → Netlify Function.</div></div>
+    <div class="step-item"><div class="step-num">4</div><div class="step-text"><strong>Garmin → Strava → App</strong> automatiquement après chaque séance. 🎯</div></div>
   </div>
-
-  <!-- Preview stats (demo) -->
-
-  <div style="font-size:9px;color:var(--muted);letter-spacing:0.15em;margin:14px 0 8px">// APERÇU — CE QUI S'AFFICHERA</div>
+  <div style="font-size:9px;color:var(--muted);letter-spacing:.15em;margin:14px 0 8px">// APERÇU DONNÉES</div>
   <div class="strava-info-grid">
     <div class="strava-info-box"><div class="strava-info-val">47</div><div class="strava-info-lbl">SÉANCES TOTAL</div></div>
     <div class="strava-info-box"><div class="strava-info-val">7</div><div class="strava-info-lbl">CETTE SEMAINE</div></div>
     <div class="strava-info-box"><div class="strava-info-val">142</div><div class="strava-info-lbl">KM CE MOIS</div></div>
-    <div class="strava-info-box"><div class="strava-info-val">18h</div><div class="strava-info-lbl">TEMPS D'EFFORT</div></div>
+    <div class="strava-info-box"><div class="strava-info-val">18h</div><div class="strava-info-lbl">TEMPS EFFORT</div></div>
   </div>
+  <div style="font-size:9px;color:var(--muted);letter-spacing:.15em;margin-bottom:8px">// DERNIÈRES ACTIVITÉS</div>
+  <div class="activity-card"><div style="position:absolute;top:8px;right:12px;font-size:8px;color:rgba(252,76,2,.3)">GARMIN</div><div class="act-card-name">🏋️ Musculation</div><div class="act-card-date">AUJOURD'HUI · 22:15</div><div class="act-stats"><div class="act-stat"><div class="act-stat-val">1h12</div><div class="act-stat-lbl">DURÉE</div></div><div class="act-stat"><div class="act-stat-val">487</div><div class="act-stat-lbl">CALORIES</div></div><div class="act-stat"><div class="act-stat-val">142</div><div class="act-stat-lbl">BPM MOY</div></div></div></div>
+  <div class="activity-card"><div style="position:absolute;top:8px;right:12px;font-size:8px;color:rgba(252,76,2,.3)">GARMIN</div><div class="act-card-name">🚶 Marche Active</div><div class="act-card-date">HIER · 10:30</div><div class="act-stats"><div class="act-stat"><div class="act-stat-val">1h45</div><div class="act-stat-lbl">DURÉE</div></div><div class="act-stat"><div class="act-stat-val">10.2</div><div class="act-stat-lbl">KM</div></div><div class="act-stat"><div class="act-stat-val">318</div><div class="act-stat-lbl">CALORIES</div></div></div></div>
+</div></div>
 
-  <!-- Sample activity cards -->
-
-  <div style="font-size:9px;color:var(--muted);letter-spacing:0.15em;margin-bottom:8px">// DERNIÈRES ACTIVITÉS (APRÈS CONNEXION)</div>
-  <div class="activity-card">
-    <div style="position:absolute;top:8px;right:12px;font-size:8px;color:rgba(252,76,2,0.4);letter-spacing:0.1em">GARMIN CONNECT</div>
-    <div class="act-card-row">
-      <div><div class="act-card-name">🏋️ Musculation</div><div class="act-card-date">AUJOURD'HUI · 22:15</div></div>
-    </div>
-    <div class="act-stats">
-      <div class="act-stat"><div class="act-stat-val">1h12</div><div class="act-stat-lbl">DURÉE</div></div>
-      <div class="act-stat"><div class="act-stat-val">487</div><div class="act-stat-lbl">CALORIES</div></div>
-      <div class="act-stat"><div class="act-stat-val">142</div><div class="act-stat-lbl">BPM MOY</div></div>
-    </div>
-  </div>
-  <div class="activity-card">
-    <div style="position:absolute;top:8px;right:12px;font-size:8px;color:rgba(252,76,2,0.4);letter-spacing:0.1em">GARMIN CONNECT</div>
-    <div class="act-card-row">
-      <div><div class="act-card-name">🚶 Marche Active</div><div class="act-card-date">HIER · 10:30</div></div>
-    </div>
-    <div class="act-stats">
-      <div class="act-stat"><div class="act-stat-val">1h45</div><div class="act-stat-lbl">DURÉE</div></div>
-      <div class="act-stat"><div class="act-stat-val">10.2</div><div class="act-stat-lbl">KM</div></div>
-      <div class="act-stat"><div class="act-stat-val">318</div><div class="act-stat-lbl">CALORIES</div></div>
-    </div>
-  </div>
-
-  <div style="margin-top:12px;padding:11px 13px;background:rgba(252,76,2,0.04);border:1px solid rgba(252,76,2,0.15);border-radius:2px;font-size:10px;color:rgba(255,255,255,0.4);line-height:1.6;border-left:2px solid rgba(252,76,2,0.4)">
-    ⚡ <strong style="color:rgba(252,76,2,0.8)">Pour activer l'import réel</strong> : héberge d'abord l'app sur Netlify, puis reviens ici pour connecter Strava. Toutes les données Garmin seront importées automatiquement.
-  </div>
 </div>
-
-</div><!-- end pages -->
-
-<!-- BOTTOM NAV -->
 
 <nav class="bottom-nav">
-  <button class="nav-btn active" onclick="showPage('today',this)"><span class="nav-icon">📋</span><span class="nav-label">AUJOURD'HUI</span></button>
-  <button class="nav-btn" onclick="showPage('supps',this)"><span class="nav-icon">💊</span><span class="nav-label">COMPLÉMENTS</span></button>
-  <button class="nav-btn" onclick="showPage('meals',this)"><span class="nav-icon">🍽️</span><span class="nav-label">REPAS</span></button>
-  <button class="nav-btn" onclick="showPage('objectifs',this)"><span class="nav-icon">🎯</span><span class="nav-label">OBJECTIFS</span></button>
-  <button class="nav-btn" onclick="showPage('strava',this)"><span class="nav-icon">⚡</span><span class="nav-label">SPORT</span></button>
+  <button class="nav-btn active" onclick="showPage('today',this,0)"><span class="nav-icon">📋</span><span class="nav-label">AUJOURD'HUI</span></button>
+  <button class="nav-btn" onclick="showPage('supps',this,1)"><span class="nav-icon">💊</span><span class="nav-label">COMPLÉMENTS</span></button>
+  <button class="nav-btn" onclick="showPage('meals',this,2)"><span class="nav-icon">🍽️</span><span class="nav-label">REPAS</span></button>
+  <button class="nav-btn" onclick="showPage('objectifs',this,3)"><span class="nav-icon">🎯</span><span class="nav-label">OBJECTIFS</span></button>
+  <button class="nav-btn" onclick="showPage('strava',this,4)"><span class="nav-icon">⚡</span><span class="nav-label">SPORT</span></button>
 </nav>
 
-<!-- DETAIL PANEL -->
-
 <div class="detail-panel" id="detailPanel">
-  <div class="detail-hdr">
-    <button class="back-btn" onclick="closeDetail()">‹</button>
-    <div class="detail-title" id="detailTitle">DÉTAIL</div>
-  </div>
+  <div class="detail-hdr"><button class="back-btn" onclick="closeDetail()">‹</button><div class="detail-title" id="detailTitle">DÉTAIL</div></div>
   <div class="detail-body" id="detailBody"></div>
 </div>
-
-<!-- ACTIVITY MODAL -->
 
 <div class="act-modal" id="actModal">
   <div class="act-modal-inner">
     <div class="modal-title" id="modalTitle">ENREGISTRER</div>
     <div class="modal-date" id="modalDate">DATE</div>
     <div class="act-btns">
-      <div class="act-btn" id="actBtn-muscu" onclick="selectAct('muscu')">
-        <div class="act-btn-ico">🏋️</div><div class="act-btn-lbl">MUSCU</div>
-      </div>
-      <div class="act-btn" id="actBtn-cardio" onclick="selectAct('cardio')">
-        <div class="act-btn-ico">🏃</div><div class="act-btn-lbl">CARDIO</div>
-      </div>
-      <div class="act-btn" id="actBtn-natation" onclick="selectAct('natation')">
-        <div class="act-btn-ico">🏊</div><div class="act-btn-lbl">NATATION</div>
-      </div>
-      <div class="act-btn" id="actBtn-marche" onclick="selectAct('marche')">
-        <div class="act-btn-ico">🚶</div><div class="act-btn-lbl">MARCHE</div>
-      </div>
+      <div class="act-btn" id="actBtn-muscu" onclick="selectAct('muscu')"><div class="act-btn-ico">🏋️</div><div class="act-btn-lbl">MUSCU</div></div>
+      <div class="act-btn" id="actBtn-cardio" onclick="selectAct('cardio')"><div class="act-btn-ico">🏃</div><div class="act-btn-lbl">CARDIO</div></div>
+      <div class="act-btn" id="actBtn-natation" onclick="selectAct('natation')"><div class="act-btn-ico">🏊</div><div class="act-btn-lbl">NATATION</div></div>
+      <div class="act-btn" id="actBtn-marche" onclick="selectAct('marche')"><div class="act-btn-ico">🚶</div><div class="act-btn-lbl">MARCHE</div></div>
     </div>
     <div class="modal-acts">
       <button class="modal-save" onclick="saveActivity()">ENREGISTRER</button>
@@ -1412,274 +567,146 @@ to{opacity:1;transform:translateY(0)}
 </div>
 
 <script>
-// ════════ DATA ════════
-const GOAL=3150;
-const mealData={
-  1:[{k:724,p:70,g:57,f:8},{k:815,p:53,g:51,f:13},{k:475,p:69,g:29,f:7},{k:546,p:60,g:59,f:6}],
-  2:[{k:696,p:86,g:27,f:13},{k:772,p:57,g:25,f:14},{k:646,p:44,g:44,f:7},{k:539,p:70,g:19,f:10}]
-};
-const collData=[{k:355,p:22,g:38,f:4},{k:319,p:23,g:15,f:1},{k:168,p:12,g:14,f:2},{k:218,p:22,g:6,f:2}];
-let sel={1:0,coll:0,2:0};
+// ── PARTICLES ──
+const canvas=document.getElementById('pc'),ctx=canvas.getContext('2d');
+let W,H;
+function rc(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+rc();window.addEventListener('resize',rc);
+class P{constructor(){this.r();}r(){this.x=Math.random()*W;this.y=Math.random()*H;this.s=Math.random()*1.5+.2;this.sx=(Math.random()-.5)*.25;this.sy=-Math.random()*.35-.05;this.o=Math.random()*.5+.1;this.c=Math.random()>.6?'#c8ff00':Math.random()>.5?'#00e5ff':'#7c3aed';}u(){this.x+=this.sx;this.y+=this.sy;this.o-=.0007;if(this.y<-5||this.o<=0)this.r();}d(){ctx.save();ctx.globalAlpha=this.o;ctx.fillStyle=this.c;ctx.beginPath();ctx.arc(this.x,this.y,this.s,0,Math.PI*2);ctx.fill();ctx.restore();}}
+const pts=[];for(let i=0;i<55;i++)pts.push(new P());
+(function ap(){ctx.clearRect(0,0,W,H);pts.forEach(p=>{p.u();p.d();});requestAnimationFrame(ap);})();
 
-const actColors={muscu:'#c8ff00',cardio:'#00e5ff',natation:'#7c3aed',marche:'#ff6b00'};
-const actIcons={muscu:'🏋️',cardio:'🏃',natation:'🏊',marche:'🚶'};
+// ── SPLASH ──
+setTimeout(()=>{const s=document.getElementById('splash');s.classList.add('hide');setTimeout(()=>s.remove(),800);},2200);
 
-let calYear,calMonth,selectedDay=null,selectedAct=null;
+// ── TILT ──
+function initTilt(){document.querySelectorAll('.hud-card.clickable').forEach(c=>{c.addEventListener('touchstart',e=>{const r=c.getBoundingClientRect(),t=e.touches[0],x=(t.clientX-r.left)/r.width-.5,y=(t.clientY-r.top)/r.height-.5;c.style.transform=`perspective(500px) rotateY(${x*7}deg) rotateX(${-y*5}deg) scale(1.015)`;},{passive:true});c.addEventListener('touchend',()=>{c.style.transform='';});});}
+setTimeout(initTilt,2500);
 
-// ════════ NAV ════════
-function showPage(id,btn){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+// ── NAV ──
+let curIdx=0;
+function showPage(id,btn,idx){
+  const cur=document.querySelector('.page.active'),nxt=document.getElementById('page-'+id);
+  if(cur===nxt)return;
+  const fwd=idx>curIdx;curIdx=idx;
+  cur.classList.add(fwd?'so-l':'so-r');cur.style.pointerEvents='none';
+  setTimeout(()=>{
+    cur.classList.remove('active','so-l','so-r');cur.style.pointerEvents='';
+    const st=nxt.querySelector('.stagger');
+    if(st){st.querySelectorAll('*').forEach(el=>{el.style.animation='none';el.offsetHeight;el.style.animation='';});}
+    nxt.classList.add('active',fwd?'si-r':'si-l');nxt.style.pointerEvents='all';
+    setTimeout(()=>nxt.classList.remove('si-r','si-l'),450);
+  },220);
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('page-'+id).classList.add('active');
   btn.classList.add('active');
-  if(id==='objectifs') renderCalendar();
+  if(id==='objectifs')setTimeout(renderCalendar,300);
+  setTimeout(initTilt,600);
 }
 
-// ════════ SUPPS ════════
-const suppData={
-  chardon:{icon:'🌿',name:'CHARDON-MARIE',brand:'NOW Foods Double Strength · 200 caps',color:'#c8ff00',dose:'300mg',freq:'2x/jour avec repas',stock:'200 caps (~100 jours)',timings:[{time:'14h00',desc:'Avec repas 1 — manger avant'},{time:'20h00',desc:'Avec repas 2 — manger avant'}],benefits:['🫀 Protection & régénération hépatique','🌿 Silymarine 240mg — forme la plus active','🌱 Contient artichaut + pissenlit pour synergie','⚡ Réduit les enzymes hépatiques élevées','🔥 Protège contre la stéatose hépatique']},
-  omega3:{icon:'🐟',name:'OMÉGA-3 FISH OIL',brand:'California Gold Nutrition · 240 caps',color:'#00e5ff',dose:'2 caps = 360mg EPA + 240mg DHA',freq:'2x/jour avec repas',stock:'240 caps (~4 mois)',timings:[{time:'14h00',desc:'Avec repas 1'},{time:'20h00',desc:'Avec repas 2'}],benefits:['🔥 Réduit la graisse viscérale — preuves cliniques','🫀 Protège le foie contre la stéatose hépatique','💪 Anti-inflammatoire musculaire post-effort','📉 Réduit les triglycérides sanguins']},
-  berberin:{icon:'🌱',name:'BERBÉRINE',brand:'California Gold Nutrition · 500mg',color:'#ff6b00',dose:'500mg',freq:'3x/jour — 15 min avant chaque repas',stock:'À commander sur iHerb',timings:[{time:'13h45',desc:'15 min avant repas 1'},{time:'19h45',desc:'15 min avant repas 2'},{time:'Coucher',desc:'Avant de dormir'}],benefits:['🔥 Réduit la graisse viscérale — études cliniques directes','📉 Régule la glycémie et l\'insuline','💪 Améliore la sensibilité à l\'insuline','⚠️ Attendre 30 min après la Whey protein']},
-  curcumine:{icon:'💛',name:'CURCUMINE + PIPÉRINE',brand:'CGN Silymarin Complex · 360 caps',color:'#ffd700',dose:'1-2 caps',freq:'2x/jour avec repas',stock:'360 caps (~6 mois)',timings:[{time:'14h00',desc:'Avec repas 1 (contient aussi Chardon-Marie)'},{time:'20h00',desc:'Avec repas 2'}],benefits:['🌿 Contient aussi Silymarine + artichaut + pissenlit','🔥 Anti-inflammatoire foie et reins','💪 Réduit les douleurs musculaires post-effort','⚡ BioPerine intégré = absorption x20']},
-  ashwa:{icon:'🍃',name:'ASHWAGANDHA KSM-66',brand:'Jarrow Formulas · 300mg · EN STOCK',color:'#c8ff00',dose:'300mg',freq:'2x/jour',stock:'En stock ✓',timings:[{time:'Réveil',desc:'À jeun avec vinaigre de cidre'},{time:'Coucher',desc:'Avant de dormir'}],benefits:['⚡ Réduit le cortisol — cible la fatigue chronique','🧠 Améliore la résistance au stress mental','💪 Légère augmentation testostérone naturelle','😴 Améliore la qualité du sommeil profond']},
-  multi:{icon:'💊',name:'MULTIVITAMINES TWO-PER-DAY',brand:'Life Extension · 120 caps · À COMMANDER',color:'#7c3aed',dose:'1 capsule',freq:'2x/jour avec repas — jamais le soir seul',stock:'⚠️ À commander (19.38€)',timings:[{time:'14h00',desc:'Avec repas 1 — 1ère capsule'},{time:'20h00',desc:'Avec repas 2 — 2ème capsule'}],benefits:['🧬 Comble toutes les carences micronutritionnelles','⚡ Vitamines B — énergie et métabolisme','💪 Zinc + Magnésium — testostérone et récupération','☀️ Vitamine D3 — essentielle']},
-  cidre:{icon:'🍎',name:'VINAIGRE DE CIDRE',brand:'Bragg Non Filtré · Liquide',color:'#a8e6a3',dose:'1cs dans 250ml eau minimum',freq:'1x/jour matin à jeun',stock:'À acheter',timings:[{time:'Réveil',desc:'À jeun — premier acte de la journée — avec paille'}],benefits:['📉 Régule la glycémie matinale','🫀 Synergie avec Chardon-Marie pour la détox foie','🦠 Soutient la flore intestinale','⚠️ TOUJOURS dilué — jamais pur — boire avec paille']},
-  creatine:{icon:'⚡',name:'CRÉATINE MONOHYDRATE',brand:'En stock ✓',color:'#ff6b00',dose:'5g',freq:'1x/jour pré-entraînement',stock:'En stock ✓',timings:[{time:'Pré-séance',desc:'30 min avant entraînement'}],benefits:['💪 Augmente la force et la puissance musculaire','📈 Améliore les performances sur les séries courtes','✅ Supplément le plus étudié au monde']},
-  beta:{icon:'🔥',name:'BÊTA-ALANINE',brand:'En stock ✓',color:'#ff6b00',dose:'Selon dosage produit',freq:'1x pré-entraînement avec créatine',stock:'En stock ✓',timings:[{time:'Pré-séance',desc:'30 min avant — avec la créatine'}],benefits:['🏃 Augmente l\'endurance musculaire','⚡ Retarde la fatigue acide lactique','⚠️ Fourmillements normaux — c\'est bon signe']},
-  whey:{icon:'🥛',name:'WHEY PROTEIN HALAL',brand:'iHerb · En stock ✓',color:'#00e5ff',dose:'~28g de protéines/dose',freq:'Post-entraînement immédiatement',stock:'En stock ✓ · Vérifier certification halal',timings:[{time:'Post-séance',desc:'Immédiatement après l\'effort — fenêtre anabolique'}],benefits:['💪 Récupération musculaire optimale','⚡ Absorption rapide post-effort','🍌 Mixer : banane + lait d\'avoine + cacao pour masquer le goût','⚠️ Attendre 30 min après Berbérine','✅ Certification halal obligatoire']},
-  bcaa:{icon:'💪',name:'BCAA',brand:'En stock ✓',color:'#00e5ff',dose:'Selon dosage produit',freq:'Post-entraînement avec Whey',stock:'En stock ✓',timings:[{time:'Post-séance',desc:'Avec la Whey après l\'effort'}],benefits:['🔄 Limite le catabolisme musculaire','💪 Accélère la récupération','😴 Réduit les courbatures post-effort']},
-  cerise:{icon:'🍒',name:'CONCENTRÉ CERISE NOIRE',brand:'En stock ✓',color:'#ff0080',dose:'Selon dosage produit',freq:'Le soir avant coucher',stock:'En stock ✓',timings:[{time:'Coucher',desc:'Avant de dormir — agit pendant le sommeil'}],benefits:['🍒 Anthocyanes — anti-inflammatoires puissants','😴 Mélatonine naturelle — améliore le sommeil','💪 Réduit les douleurs musculaires nocturnes','🔄 Accélère la récupération pendant la nuit']}
-};
+// ── BUMP ──
+function bump(el){el.classList.remove('bump');el.offsetHeight;el.classList.add('bump');}
+function addRipple(el){const r=document.createElement('div');r.style.cssText='position:absolute;border-radius:50%;background:rgba(200,255,0,.15);width:10px;height:10px;animation:ripOut .4s ease forwards;pointer-events:none;top:50%;left:20px;transform:translate(-50%,-50%)';el.appendChild(r);setTimeout(()=>r.remove(),400);}
 
+// ── SUPPS ──
+const suppData={
+  chardon:{icon:'🌿',name:'CHARDON-MARIE',brand:'NOW Foods Double Strength · 200 caps',color:'#c8ff00',dose:'300mg',freq:'2x/jour avec repas',stock:'200 caps (~100 jours)',timings:[{time:'14h00',desc:'Avec repas 1'},{time:'20h00',desc:'Avec repas 2'}],benefits:['🫀 Protection & régénération hépatique','🌿 Silymarine 240mg — forme la plus active','🌱 Artichaut + pissenlit pour synergie','⚡ Réduit les enzymes hépatiques élevées']},
+  omega3:{icon:'🐟',name:'OMÉGA-3 FISH OIL',brand:'CGN · 240 caps',color:'#00e5ff',dose:'2 caps = 360mg EPA + 240mg DHA',freq:'2x/jour avec repas',stock:'240 caps (~4 mois)',timings:[{time:'14h00',desc:'Avec repas 1'},{time:'20h00',desc:'Avec repas 2'}],benefits:['🔥 Réduit la graisse viscérale','🫀 Protège contre la stéatose hépatique','💪 Anti-inflammatoire musculaire','📉 Réduit les triglycérides']},
+  berberin:{icon:'🌱',name:'BERBÉRINE',brand:'CGN · 500mg',color:'#ff6b00',dose:'500mg',freq:'3x/jour — 15 min avant repas',stock:'À commander iHerb',timings:[{time:'13h45',desc:'15 min avant repas 1'},{time:'19h45',desc:'15 min avant repas 2'},{time:'Coucher',desc:'Avant de dormir'}],benefits:['🔥 Réduit la graisse viscérale','📉 Régule glycémie et insuline','💪 Sensibilité à l\'insuline améliorée','⚠️ Attendre 30 min après Whey']},
+  curcumine:{icon:'💛',name:'CURCUMINE + PIPÉRINE',brand:'CGN Silymarin Complex · 360 caps',color:'#ffd700',dose:'1-2 caps',freq:'2x/jour avec repas',stock:'360 caps (~6 mois)',timings:[{time:'14h00',desc:'Avec repas 1'},{time:'20h00',desc:'Avec repas 2'}],benefits:['🌿 Aussi Silymarine + artichaut + pissenlit','🔥 Anti-inflammatoire foie et reins','💪 Réduit douleurs post-effort','⚡ BioPerine intégré = absorption x20']},
+  ashwa:{icon:'🍃',name:'ASHWAGANDHA KSM-66',brand:'Jarrow · 300mg · EN STOCK',color:'#c8ff00',dose:'300mg',freq:'2x/jour',stock:'En stock ✓',timings:[{time:'Réveil',desc:'À jeun avec vinaigre'},{time:'Coucher',desc:'Avant de dormir'}],benefits:['⚡ Réduit le cortisol','🧠 Résistance au stress mental','💪 Légère hausse testostérone','😴 Améliore qualité du sommeil']},
+  multi:{icon:'💊',name:'MULTIVITAMINES TWO-PER-DAY',brand:'Life Extension · 120 caps',color:'#7c3aed',dose:'1 cap',freq:'2x/jour avec repas',stock:'⚠️ À commander (19.38€)',timings:[{time:'14h00',desc:'1ère capsule'},{time:'20h00',desc:'2ème capsule'}],benefits:['🧬 Comble toutes les carences','⚡ Vitamines B — énergie','💪 Zinc + Magnésium','☀️ Vitamine D3 essentielle']},
+  cidre:{icon:'🍎',name:'VINAIGRE DE CIDRE',brand:'Bragg Non Filtré',color:'#a8e6a3',dose:'1cs / 250ml eau',freq:'Matin à jeun',stock:'À acheter',timings:[{time:'Réveil',desc:'Premier acte — avec paille'}],benefits:['📉 Régule glycémie matinale','🫀 Synergie détox foie','🦠 Soutient la flore intestinale','⚠️ TOUJOURS dilué — jamais pur']},
+  creatine:{icon:'⚡',name:'CRÉATINE MONOHYDRATE',brand:'En stock ✓',color:'#ff6b00',dose:'5g',freq:'Pré-entraînement',stock:'En stock ✓',timings:[{time:'Pré-séance',desc:'30 min avant'}],benefits:['💪 Force et puissance musculaire','📈 Meilleures performances','✅ Supplément le plus étudié']},
+  beta:{icon:'🔥',name:'BÊTA-ALANINE',brand:'En stock ✓',color:'#ff6b00',dose:'Selon dosage',freq:'Pré-entraînement',stock:'En stock ✓',timings:[{time:'Pré-séance',desc:'Avec la créatine'}],benefits:['🏃 Endurance musculaire','⚡ Retarde la fatigue','⚠️ Fourmillements normaux — bon signe']},
+  whey:{icon:'🥛',name:'WHEY PROTEIN HALAL',brand:'iHerb · En stock ✓',color:'#00e5ff',dose:'~28g protéines',freq:'Post-entraînement immédiat',stock:'En stock ✓',timings:[{time:'Post-séance',desc:'Immédiatement après effort'}],benefits:['💪 Récupération optimale','⚡ Absorption rapide','🍌 Banane + lait avoine + cacao pour le goût','✅ Certification halal obligatoire']},
+  bcaa:{icon:'💪',name:'BCAA',brand:'En stock ✓',color:'#00e5ff',dose:'Selon dosage',freq:'Post-entraînement',stock:'En stock ✓',timings:[{time:'Post-séance',desc:'Avec la Whey'}],benefits:['🔄 Limite catabolisme musculaire','💪 Accélère récupération','😴 Réduit les courbatures']},
+  cerise:{icon:'🍒',name:'CONCENTRÉ CERISE NOIRE',brand:'En stock ✓',color:'#ff0080',dose:'Selon dosage',freq:'Soir avant coucher',stock:'En stock ✓',timings:[{time:'Coucher',desc:'Agit pendant le sommeil'}],benefits:['🍒 Anthocyanes anti-inflammatoires','😴 Mélatonine naturelle','💪 Réduit douleurs nocturnes','🔄 Récupération nocturne']}
+};
 function openSupp(key){
-  const s=suppData[key]; if(!s) return;
+  const s=suppData[key];if(!s)return;
   document.getElementById('detailTitle').textContent=s.name;
-  const tH=s.timings.map(t=>`<div style="background:var(--card);border:1px solid var(--border2);border-radius:2px;padding:10px 13px;display:flex;align-items:center;gap:12px;margin-bottom:6px"><div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;color:${s.color};min-width:55px">${t.time}</div><div style="font-size:12px;color:rgba(240,240,255,0.7)">${t.desc}</div></div>`).join('');
-  const bH=s.benefits.map(b=>`<div style="background:rgba(255,255,255,0.02);border-radius:2px;padding:8px 11px;font-size:12px;color:rgba(240,240,255,0.7);line-height:1.5;border-left:2px solid ${s.color};margin-bottom:5px">${b}</div>`).join('');
-  document.getElementById('detailBody').innerHTML=`
-    <div style="background:linear-gradient(135deg,${s.color}12,${s.color}04);border:1px solid ${s.color}25;border-radius:2px;padding:20px;margin-bottom:14px;text-align:center;position:relative">
-      <div style="position:absolute;top:0;left:0;right:0;height:2px;background:${s.color}"></div>
-      <div style="font-size:44px;margin-bottom:8px">${s.icon}</div>
-      <div style="font-family:'Oswald',sans-serif;font-weight:700;font-size:20px;color:${s.color};letter-spacing:0.08em;margin-bottom:4px">${s.name}</div>
-      <div style="font-size:10px;color:var(--muted);letter-spacing:0.06em">${s.brand}</div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:14px">
-      <div style="background:var(--card);border:1px solid var(--border2);border-radius:2px;padding:12px;text-align:center"><div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;color:${s.color};margin-bottom:4px">${s.dose}</div><div style="font-size:9px;color:var(--muted);letter-spacing:0.1em">DOSE</div></div>
-      <div style="background:var(--card);border:1px solid var(--border2);border-radius:2px;padding:12px;text-align:center"><div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;color:${s.color};margin-bottom:4px">${s.freq}</div><div style="font-size:9px;color:var(--muted);letter-spacing:0.1em">FRÉQUENCE</div></div>
-    </div>
-    <div style="font-size:9px;color:var(--muted);letter-spacing:0.15em;margin-bottom:8px">// TIMING</div>
-    ${tH}
-    <div style="font-size:9px;color:var(--muted);letter-spacing:0.15em;margin:12px 0 8px">// BÉNÉFICES</div>
-    ${bH}
-    <div style="margin-top:12px;padding:11px 13px;background:rgba(255,255,255,0.02);border-radius:2px;border:1px solid var(--border2)">
-      <div style="font-size:9px;color:var(--muted);letter-spacing:0.1em;margin-bottom:4px">STOCK</div>
-      <div style="font-size:12px;color:var(--text)">${s.stock}</div>
-    </div>`;
+  const tH=s.timings.map(t=>`<div style="background:var(--card);border:1px solid var(--border2);border-radius:3px;padding:10px 13px;display:flex;align-items:center;gap:12px;margin-bottom:6px"><div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;color:${s.color};min-width:60px;text-shadow:0 0 10px ${s.color}44">${t.time}</div><div style="font-size:12px;color:rgba(240,240,255,.7)">${t.desc}</div></div>`).join('');
+  const bH=s.benefits.map(b=>`<div style="background:rgba(255,255,255,.02);border-radius:3px;padding:8px 11px;font-size:12px;color:rgba(240,240,255,.7);line-height:1.5;border-left:2px solid ${s.color};margin-bottom:5px">${b}</div>`).join('');
+  document.getElementById('detailBody').innerHTML=`<div style="background:linear-gradient(135deg,${s.color}12,${s.color}03);border:1px solid ${s.color}20;border-radius:3px;padding:20px;margin-bottom:14px;text-align:center;position:relative;overflow:hidden"><div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,${s.color},transparent)"></div><div style="font-size:48px;margin-bottom:8px;display:block;animation:eF 3s ease infinite">${s.icon}</div><div style="font-family:'Oswald',sans-serif;font-weight:700;font-size:22px;color:${s.color};letter-spacing:.08em;margin-bottom:4px;text-shadow:0 0 20px ${s.color}44">${s.name}</div><div style="font-size:10px;color:var(--muted);letter-spacing:.06em">${s.brand}</div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:14px"><div style="background:var(--card);border:1px solid var(--border2);border-radius:3px;padding:12px;text-align:center;border-top:2px solid ${s.color}"><div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;color:${s.color};margin-bottom:4px">${s.dose}</div><div style="font-size:9px;color:var(--muted);letter-spacing:.1em">DOSE</div></div><div style="background:var(--card);border:1px solid var(--border2);border-radius:3px;padding:12px;text-align:center;border-top:2px solid ${s.color}"><div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;color:${s.color};margin-bottom:4px">${s.freq}</div><div style="font-size:9px;color:var(--muted);letter-spacing:.1em">FRÉQUENCE</div></div></div><div style="font-size:9px;color:var(--muted);letter-spacing:.15em;margin-bottom:8px">// TIMING</div>${tH}<div style="font-size:9px;color:var(--muted);letter-spacing:.15em;margin:12px 0 8px">// BÉNÉFICES</div>${bH}<div style="margin-top:12px;padding:11px 13px;background:rgba(255,255,255,.02);border-radius:3px;border:1px solid var(--border2)"><div style="font-size:9px;color:var(--muted);letter-spacing:.1em;margin-bottom:4px">STOCK</div><div style="font-size:12px;color:var(--text)">${s.stock}</div></div>`;
   document.getElementById('detailPanel').classList.add('open');
 }
-function closeDetail(){ document.getElementById('detailPanel').classList.remove('open'); }
+function closeDetail(){document.getElementById('detailPanel').classList.remove('open');}
 
-// ════════ MEALS ════════
-function switchMeal(meal,idx,btn){
-  btn.parentElement.querySelectorAll('.mtab').forEach(t=>t.classList.remove('active','c2'));
-  btn.classList.add('active');
-  if(meal===2) btn.classList.add('c2');
-  document.querySelectorAll(`[id^="m${meal}-"]`).forEach(p=>p.classList.remove('active'));
-  document.getElementById(`m${meal}-${idx}`).classList.add('active');
-  sel[meal]=idx;
-  updateTracker();
-}
-function selColl(idx){
-  document.querySelectorAll('[id^="coll-"]').forEach(c=>c.classList.remove('selected'));
-  document.getElementById('coll-'+idx).classList.add('selected');
-  sel.coll=idx;
-  updateTracker();
-}
+// ── MEALS ──
+const GOAL=3150;
+const mealData={1:[{k:724,p:70,g:57,f:8},{k:815,p:53,g:51,f:13},{k:475,p:69,g:29,f:7},{k:546,p:60,g:59,f:6}],2:[{k:696,p:86,g:27,f:13},{k:772,p:57,g:25,f:14},{k:646,p:44,g:44,f:7},{k:539,p:70,g:19,f:10}]};
+const collData=[{k:355,p:22,g:38,f:4},{k:319,p:23,g:15,f:1},{k:168,p:12,g:14,f:2},{k:218,p:22,g:6,f:2}];
+let sel={1:0,coll:0,2:0};
+function switchMeal(meal,idx,btn){btn.parentElement.querySelectorAll('.mtab').forEach(t=>t.classList.remove('active','c2'));btn.classList.add('active');if(meal===2)btn.classList.add('c2');document.querySelectorAll(`[id^="m${meal}-"]`).forEach(p=>p.classList.remove('active'));document.getElementById(`m${meal}-${idx}`).classList.add('active');sel[meal]=idx;updateTracker();}
+function selColl(idx){document.querySelectorAll('[id^="coll-"]').forEach(c=>c.classList.remove('selected'));document.getElementById('coll-'+idx).classList.add('selected');sel.coll=idx;updateTracker();}
 function updateTracker(){
   const r1=mealData[1][sel[1]],co=collData[sel.coll],r2=mealData[2][sel[2]];
   const tk=r1.k+co.k+r2.k,tp=r1.p+co.p+r2.p,tg=r1.g+co.g+r2.g,tf=r1.f+co.f+r2.f;
-  document.getElementById('trackerTotal').textContent=tk;
-  document.getElementById('tProt').textContent=tp+'g';
-  document.getElementById('tGluc').textContent=tg+'g';
-  document.getElementById('tFib').textContent=tf+'g';
+  const tEl=document.getElementById('trackerTotal');tEl.textContent=tk;bump(tEl);
+  const pEl=document.getElementById('tProt');pEl.textContent=tp+'g';bump(pEl);
+  const gEl=document.getElementById('tGluc');gEl.textContent=tg+'g';bump(gEl);
+  const fEl=document.getElementById('tFib');fEl.textContent=tf+'g';bump(fEl);
   const pct=Math.min(110,Math.round(tk/GOAL*100));
   document.getElementById('trackerBar').style.width=Math.min(100,pct)+'%';
+  document.getElementById('trackerBar').style.background=pct>105?'linear-gradient(90deg,var(--orange),var(--pink))':'linear-gradient(90deg,var(--lime),var(--cyan))';
   const remain=GOAL-tk;
-  const rEl=document.getElementById('trackerRemain');
-  rEl.textContent=remain>0?remain+' RESTANTS':Math.abs(remain)+' AU-DESSUS';
-  rEl.style.color=remain<0?'var(--orange)':'var(--lime)';
-  document.getElementById('trackerBar').style.background=pct>105?'linear-gradient(90deg,var(--orange),var(--pink))':pct>90?'linear-gradient(90deg,var(--lime),var(--cyan))':'linear-gradient(90deg,var(--lime),var(--cyan))';
+  const rEl=document.getElementById('trackerRemain');rEl.textContent=remain>0?remain+' RESTANTS':Math.abs(remain)+' AU-DESSUS';rEl.style.color=remain<0?'var(--orange)':'var(--lime)';
   document.getElementById('trackerStatus').textContent=pct+'% DE L\'OBJECTIF';
 }
 
-// ════════ TODO ════════
+// ── TODO ──
 const TKEY='todo_'+new Date().toISOString().slice(0,10);
-function saveTodos(){
-  const state={};
-  document.querySelectorAll('.todo-item').forEach((el,i)=>state[i]=el.classList.contains('done'));
-  try{localStorage.setItem(TKEY,JSON.stringify(state));}catch(e){}
-}
-function loadTodos(){
-  try{
-    const saved=localStorage.getItem(TKEY);
-    if(!saved) return;
-    const state=JSON.parse(saved);
-    document.querySelectorAll('.todo-item').forEach((el,i)=>{
-      if(state[i]){el.classList.add('done');el.querySelector('.todo-check').textContent='✓';}
-    });
-    updateProgress();
-  }catch(e){}
-}
-function toggleTodo(el){
-  el.classList.toggle('done');
-  el.querySelector('.todo-check').textContent=el.classList.contains('done')?'✓':'';
-  saveTodos(); updateProgress();
-}
-function updateProgress(){
-  const all=document.querySelectorAll('.todo-item').length;
-  const done=document.querySelectorAll('.todo-item.done').length;
-  const pct=Math.round(done/all*100);
-  document.getElementById('todoProgressBar').style.width=pct+'%';
-  document.getElementById('todoProgressLabel').textContent=done+'/'+all+' · '+pct+'%';
-}
+function saveTodos(){const st={};document.querySelectorAll('.todo-item').forEach((el,i)=>st[i]=el.classList.contains('done'));try{localStorage.setItem(TKEY,JSON.stringify(st));}catch(e){}}
+function loadTodos(){try{const s=localStorage.getItem(TKEY);if(!s)return;const st=JSON.parse(s);document.querySelectorAll('.todo-item').forEach((el,i)=>{if(st[i]){el.classList.add('done');el.querySelector('.todo-check').textContent='✓';}});updateProgress();}catch(e){}}
+function toggleTodo(el){el.classList.toggle('done');el.querySelector('.todo-check').textContent=el.classList.contains('done')?'✓':'';addRipple(el);saveTodos();updateProgress();}
+function updateProgress(){const all=document.querySelectorAll('.todo-item').length,done=document.querySelectorAll('.todo-item.done').length,pct=Math.round(done/all*100);document.getElementById('todoProgressBar').style.width=pct+'%';document.getElementById('todoProgressLabel').textContent=done+'/'+all+' · '+pct+'%';}
 
-// ════════ CALENDAR ════════
+// ── CALENDAR ──
+const actColors={muscu:'#c8ff00',cardio:'#00e5ff',natation:'#7c3aed',marche:'#ff6b00'};
+const actIcons={muscu:'🏋️',cardio:'🏃',natation:'🏊',marche:'🚶'};
+let calYear,calMonth,selectedDay=null,selectedAct=null;
 function getActData(){try{return JSON.parse(localStorage.getItem('activities')||'{}');}catch(e){return {};}}
-function saveActData(data){try{localStorage.setItem('activities',JSON.stringify(data));}catch(e){}}
-
-function calNav(dir){
-  calMonth+=dir;
-  if(calMonth>11){calMonth=0;calYear++;}
-  if(calMonth<0){calMonth=11;calYear--;}
-  renderCalendar();
-}
-
+function saveActData(d){try{localStorage.setItem('activities',JSON.stringify(d));}catch(e){}}
+function calNav(dir){calMonth+=dir;if(calMonth>11){calMonth=0;calYear++;}if(calMonth<0){calMonth=11;calYear--;}renderCalendar();}
 function renderCalendar(){
-  const now=new Date();
-  const months=['JANVIER','FÉVRIER','MARS','AVRIL','MAI','JUIN','JUILLET','AOÛT','SEPTEMBRE','OCTOBRE','NOVEMBRE','DÉCEMBRE'];
+  const now=new Date(),months=['JANVIER','FÉVRIER','MARS','AVRIL','MAI','JUIN','JUILLET','AOÛT','SEPTEMBRE','OCTOBRE','NOVEMBRE','DÉCEMBRE'];
   document.getElementById('calMonthTitle').textContent=months[calMonth]+' '+calYear;
-  const data=getActData();
-  const grid=document.getElementById('calGrid');
+  const data=getActData(),grid=document.getElementById('calGrid'),days=new Date(calYear,calMonth+1,0).getDate();
+  let sd=new Date(calYear,calMonth,1).getDay()-1;if(sd<0)sd=6;
   grid.innerHTML='';
-  const firstDay=new Date(calYear,calMonth,1);
-  const daysInMonth=new Date(calYear,calMonth+1,0).getDate();
-  let startDow=firstDay.getDay()-1; if(startDow<0) startDow=6;
-  for(let i=0;i<startDow;i++){const e=document.createElement('div');e.className='cal-day empty';grid.appendChild(e);}
-  for(let d=1;d<=daysInMonth;d++){
-    const dateStr=`${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const isToday=dateStr===now.toISOString().slice(0,10);
-    const isFuture=new Date(calYear,calMonth,d)>now;
-    const activity=data[dateStr];
-    const cell=document.createElement('div');
-    cell.className='cal-day'+(isToday?' today-c':'')+(isFuture?' future':'');
-    const num=document.createElement('div');
-    num.className='cal-daynum';
-    num.textContent=d;
-    cell.appendChild(num);
-    if(activity){
-      const ico=document.createElement('div');
-      ico.className='cal-dayico';
-      ico.textContent=actIcons[activity]||'✓';
-      cell.appendChild(ico);
-      const dot=document.createElement('div');
-      dot.className='cal-daydot';
-      dot.style.background=actColors[activity]||'var(--lime)';
-      cell.appendChild(dot);
-      cell.style.borderColor=actColors[activity]+'44';
-      cell.style.background=actColors[activity]+'0c';
-    }
-    if(!isFuture) cell.onclick=()=>openModal(dateStr,d,activity);
+  for(let i=0;i<sd;i++){const e=document.createElement('div');e.className='cal-day empty';grid.appendChild(e);}
+  for(let d=1;d<=days;d++){
+    const ds=`${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isT=ds===now.toISOString().slice(0,10),isF=new Date(calYear,calMonth,d)>now,act=data[ds];
+    const cell=document.createElement('div');cell.className='cal-day'+(isT?' today-c':'')+(isF?' future':'');
+    const num=document.createElement('div');num.className='cal-daynum';num.textContent=d;cell.appendChild(num);
+    if(act){const ico=document.createElement('div');ico.className='cal-dayico';ico.textContent=actIcons[act]||'✓';cell.appendChild(ico);const dot=document.createElement('div');dot.className='cal-daydot';dot.style.background=actColors[act]||'var(--lime)';cell.appendChild(dot);cell.style.borderColor=actColors[act]+'55';cell.style.background=actColors[act]+'10';cell.style.boxShadow='0 0 12px '+actColors[act]+'20';}
+    if(!isF)cell.onclick=()=>openModal(ds,d,act);
     grid.appendChild(cell);
   }
   updateStats();
 }
-
-function updateStats(){
-  const data=getActData();
-  const now=new Date();
-  const monthKey=`${calYear}-${String(calMonth+1).padStart(2,'0')}`;
-  let monthCount=0;
-  Object.keys(data).forEach(k=>{if(k.startsWith(monthKey)) monthCount++;});
-  document.getElementById('statMonth').textContent=monthCount;
-  document.getElementById('statTotal').textContent=Object.keys(data).length;
-  let streak=0;
-  const check=new Date(now);
-  while(streak<365){
-    const key=check.toISOString().slice(0,10);
-    if(data[key]){streak++;check.setDate(check.getDate()-1);}
-    else break;
-  }
-  document.getElementById('statStreak').textContent=streak;
-}
-
-function openModal(dateStr,day,existing){
-  selectedDay=dateStr; selectedAct=existing||null;
-  const months=['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
-  document.getElementById('modalTitle').textContent='JOUR '+day+' '+months[calMonth];
-  document.getElementById('modalDate').textContent=dateStr;
-  ['muscu','cardio','natation','marche'].forEach(a=>{
-    const btn=document.getElementById('actBtn-'+a);
-    btn.classList.remove('selected');
-    btn.style.background='var(--card)';
-    btn.style.borderColor='var(--border2)';
-  });
-  if(existing){selectAct(existing);document.getElementById('modalDel').style.display='block';}
-  else document.getElementById('modalDel').style.display='none';
-  document.getElementById('actModal').classList.add('open');
-}
+function updateStats(){const data=getActData(),now=new Date(),mk=`${calYear}-${String(calMonth+1).padStart(2,'0')}`;let mc=0;Object.keys(data).forEach(k=>{if(k.startsWith(mk))mc++;});document.getElementById('statMonth').textContent=mc;document.getElementById('statTotal').textContent=Object.keys(data).length;let streak=0;const check=new Date(now);while(streak<365){const k=check.toISOString().slice(0,10);if(data[k]){streak++;check.setDate(check.getDate()-1);}else break;}document.getElementById('statStreak').textContent=streak;}
+function openModal(ds,day,existing){selectedDay=ds;selectedAct=existing||null;const ms=['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];document.getElementById('modalTitle').textContent='JOUR '+day+' '+ms[calMonth];document.getElementById('modalDate').textContent=ds;['muscu','cardio','natation','marche'].forEach(a=>{const btn=document.getElementById('actBtn-'+a);btn.classList.remove('selected');btn.style.background='var(--card)';btn.style.borderColor='var(--border2)';});if(existing){selectAct(existing);document.getElementById('modalDel').style.display='block';}else document.getElementById('modalDel').style.display='none';document.getElementById('actModal').classList.add('open');}
 function closeModal(){document.getElementById('actModal').classList.remove('open');selectedDay=null;selectedAct=null;}
-function selectAct(act){
-  selectedAct=act;
-  ['muscu','cardio','natation','marche'].forEach(a=>{
-    const btn=document.getElementById('actBtn-'+a);
-    if(a===act){btn.classList.add('selected');btn.style.borderColor=actColors[a];btn.style.background=actColors[a]+'18';}
-    else{btn.classList.remove('selected');btn.style.background='var(--card)';btn.style.borderColor='var(--border2)';}
-  });
-}
-function saveActivity(){
-  if(!selectedDay||!selectedAct){closeModal();return;}
-  const data=getActData();
-  data[selectedDay]=selectedAct;
-  saveActData(data);
-  closeModal();
-  renderCalendar();
-}
-function deleteActivity(){
-  if(!selectedDay) return;
-  const data=getActData();
-  delete data[selectedDay];
-  saveActData(data);
-  closeModal();
-  renderCalendar();
-}
+function selectAct(act){selectedAct=act;['muscu','cardio','natation','marche'].forEach(a=>{const btn=document.getElementById('actBtn-'+a);if(a===act){btn.classList.add('selected');btn.style.borderColor=actColors[a];btn.style.background=actColors[a]+'18';}else{btn.classList.remove('selected');btn.style.background='var(--card)';btn.style.borderColor='var(--border2)';}});}
+function saveActivity(){if(!selectedDay||!selectedAct){closeModal();return;}const data=getActData();data[selectedDay]=selectedAct;saveActData(data);closeModal();renderCalendar();}
+function deleteActivity(){if(!selectedDay)return;const data=getActData();delete data[selectedDay];saveActData(data);closeModal();renderCalendar();}
 
-// ════════ STRAVA ════════
-function stravaConnect(){
-  alert('⚡ Pour activer Strava :\n\n1. Héberge d\'abord l\'app sur Netlify\n2. Crée une app sur strava.com/settings/api\n3. Reviens ici avec ton Client ID\n\nJe t\'aide étape par étape !');
-}
+// ── STRAVA ──
+function stravaConnect(){alert('⚡ Pour activer Strava :\n\nOn reprend depuis ton ordi !\n1. Nouveau code d\'autorisation\n2. Échange Postman\n3. Refresh token → Netlify Function');}
 
-// ════════ DATE INIT ════════
+// ── INIT ──
 function initDate(){
-  const now=new Date();
-  calYear=now.getFullYear(); calMonth=now.getMonth();
-  const days=['DIM','LUN','MAR','MER','JEU','VEN','SAM'];
-  const months=['JANVIER','FÉVRIER','MARS','AVRIL','MAI','JUIN','JUILLET','AOÛT','SEPTEMBRE','OCTOBRE','NOVEMBRE','DÉCEMBRE'];
+  const now=new Date();calYear=now.getFullYear();calMonth=now.getMonth();
+  const days=['DIM','LUN','MAR','MER','JEU','VEN','SAM'],months=['JANVIER','FÉVRIER','MARS','AVRIL','MAI','JUIN','JUILLET','AOÛT','SEPTEMBRE','OCTOBRE','NOVEMBRE','DÉCEMBRE'];
   document.getElementById('todayTitle').innerHTML=days[now.getDay()]+' <span class="hi">'+now.getDate()+'</span>';
   document.getElementById('headerDay').textContent=now.getDate()+' '+months[now.getMonth()]+' '+now.getFullYear()+' · IF 14H–22H · HALAL';
-  if(now.getDay()===2||now.getDay()===4) document.getElementById('cheatBanner').classList.add('visible');
+  if(now.getDay()===2||now.getDay()===4)document.getElementById('cheatBanner').classList.add('visible');
   const wMap={1:'LUN',2:'MAR',3:'MER',4:'JEU',5:'VEN',6:'SAM',0:'DIM'};
-  document.querySelectorAll('.wd-n').forEach(el=>{
-    if(el.textContent===wMap[now.getDay()]) el.closest('.w-day').classList.add('today');
-  });
-  try{
-    const todayStr=now.toISOString().slice(0,10);
-    if(localStorage.getItem('last_day')!==todayStr) localStorage.setItem('last_day',todayStr);
-  }catch(e){}
+  document.querySelectorAll('.wd-n').forEach(el=>{if(el.textContent===wMap[now.getDay()])el.closest('.w-day').classList.add('today');});
 }
-
-initDate();
-loadTodos();
-updateTracker();
+initDate();loadTodos();updateTracker();
 </script>
 
 </body>
